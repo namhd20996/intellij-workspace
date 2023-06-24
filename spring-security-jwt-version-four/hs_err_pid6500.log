@@ -1,0 +1,22 @@
+
+[error occurred during error reporting (printing fatal error message), id 0xc00000fd, EXCEPTION_STACK_OVERFLOW (0xc00000fd) at pc=0x00007ff8b0142ff7]
+
+#
+#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x0000023480000b8b, pid=6500, tid=20008
+#
+# JRE version: OpenJDK Runtime Environment (14.0.2+12) (build 14.0.2+12-46)
+# Java VM: OpenJDK 64-Bit Server VM (14.0.2+12-46, mixed mode, sharing, tiered, compressed oops, g1 gc, windows-amd64)
+# Problematic frame:
+# v  ~RuntimeStub::StackOverflowError throw_exception
+#
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   https://bugreport.java.com/bugreport/crash.jsp
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:49368,suspend=y,server=n -XX:TieredStopAtLevel=1 -Xverify:none -Dspring.output.ansi.enabled=always -Dcom.sun.management.jmxremote -Dspring.jmx.enabled=true -Dspring.liveBeansView.mbeanDomain -Dspring.application.admin.enabled=true -javaagent:C:\Users\DUYNAM~1\AppData\Local\Temp\captureAgentjars\debugger-agent.jar -Dfile.encoding=UTF-8 com.example.spring.SpringSecurityJwtVersionThreeApplication
+
+Host: 12th Gen Intel(R) Core(TM) i7-1260P, 16 cores, 15G, 
