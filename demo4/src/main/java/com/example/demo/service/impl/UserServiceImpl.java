@@ -4,14 +4,11 @@ import com.example.assign.constant.SystemConstant;
 import com.example.assign.converter.UserConverter;
 import com.example.assign.dto.UserDTO;
 import com.example.assign.entity.Role;
-import com.example.assign.entity.Token;
 import com.example.assign.entity.User;
 import com.example.assign.repo.RoleRepo;
-import com.example.assign.repo.TokenRepo;
 import com.example.assign.repo.UserRepo;
 import com.example.assign.service.JwtService;
 import com.example.assign.service.UserService;
-import com.example.assign.sysenum.TokenType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,8 +33,6 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthenticationManager authenticationManager;
-
-    private final TokenRepo tokenRepo;
 
     @Override
     public Optional<User> findUserByUsernameAndStatus(String username, Integer status) {
@@ -64,11 +59,8 @@ public class UserServiceImpl implements UserService {
             List<Role> roles = roleRepo.findRolesByName("ADMIN");
             user.setRoles(roles);
         }
-        user = userRepo.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        userDTO = converter.toDTO(user);
-        userDTO.setToken(jwtToken);
-        saveUserToken(user, jwtToken);
+        userDTO = converter.toDTO(userRepo.save(user));
+        userDTO.setToken(jwtService.generateToken(user));
         return userDTO;
     }
 
@@ -82,33 +74,8 @@ public class UserServiceImpl implements UserService {
         );
         User user = userRepo.findUserByUsernameAndStatus(dto.getUsername(), SystemConstant.STATUS_AUTH).get();
         UserDTO userDTO = converter.toDTO(user);
-        var jwtToken = jwtService.generateToken(user);
-        userDTO.setToken(jwtToken);
-        revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
+        userDTO.setToken(jwtService.generateToken(user));
         return userDTO;
-    }
-
-    private void revokeAllUserTokens(User user) {
-        var validUserTokens = tokenRepo.findAllValidTokensByUser(user.getId());
-        if (validUserTokens.isEmpty())
-            return;
-        validUserTokens.forEach(t -> {
-            t.setExpired(true);
-            t.setRevoked(true);
-        });
-        tokenRepo.saveAll(validUserTokens);
-    }
-
-    private void saveUserToken(User user, String jwtToken) {
-        var token = Token.builder()
-                .user(user)
-                .tokenType(TokenType.BEARER)
-                .token(jwtToken)
-                .expired(false)
-                .revoked(false)
-                .build();
-        tokenRepo.save(token);
     }
 
 }

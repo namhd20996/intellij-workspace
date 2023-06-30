@@ -15,7 +15,7 @@
     <name>assign-java-five-version-one</name>
     <description>assign-java-five-version-one</description>
     <properties>
-        <model.mapper.version>2.3.5</model.mapper.version>
+            <model.mapper.version>2.3.5</model.mapper.version>
         <java.version>17</java.version>
     </properties>
     <dependencies>
