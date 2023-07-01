@@ -25,7 +25,6 @@ public class LogoutServiceImpl implements LogoutHandler {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return;
         }
-
         jwt = authHeader.substring(7);
         var storedToken = tokenRepo.findByToken(jwt).orElse(null);
         if (storedToken != null) {

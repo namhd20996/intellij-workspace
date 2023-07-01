@@ -14,7 +14,7 @@ public class BaseDTO<T> {
     private String createdBy;
     private Date lastModifiedDate;
     private String lastModifiedBy;
-    private Long[] ids;
+    private UUID[] ids;
     private List<T> listResult;
     private Integer page;
     private Integer limit;

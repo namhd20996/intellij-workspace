@@ -1,6 +1,5 @@
 package com.example.assign.entity;
 
-import com.example.assign.sysenum.TokenType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,8 +14,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "_token")
-public class Token {
+@Table(name = "_orderdetails")
+public class OrderDetails {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -24,24 +23,18 @@ public class Token {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
-
     @Column
-    private String token;
-
+    private Double price;
     @Column
-    @Enumerated(EnumType.STRING)
-    private TokenType tokenType;
-
+    private Integer quantity;
     @Column
-    private boolean expired;
-
-    @Column
-    private boolean revoked;
-
+    private Double totalMoney;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "product_id")
+    private Product product;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 
 }
