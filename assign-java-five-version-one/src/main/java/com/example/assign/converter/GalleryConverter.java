@@ -31,5 +31,7 @@ public class GalleryConverter {
         return Optional.of(dtoList).map(galleries -> List.of(mapper.map(galleries, Gallery[].class))).orElse(null);
     }
 
-
+    public List<GalleryDTO> toListDTO(List<Gallery> dtoList) {
+        return Optional.of(dtoList).map(galleries -> List.of(mapper.map(galleries, GalleryDTO[].class))).orElse(null);
+    }
 }

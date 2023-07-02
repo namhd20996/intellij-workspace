@@ -19,7 +19,8 @@ public class ProductDTO extends BaseDTO<ProductDTO> {
     private Double price;
     private Integer quantity;
     private Double discount;
-    private UUID category_id;
+    private UUID category_key;
+    private UserDTO user;
     private CategoryDTO category;
     private List<GalleryDTO> galleries = new ArrayList<>();
     private List<OrderDetailsDTO> orderDetails = new ArrayList<>();

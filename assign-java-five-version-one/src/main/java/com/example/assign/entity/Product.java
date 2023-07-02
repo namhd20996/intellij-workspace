@@ -29,12 +29,15 @@ public class Product extends BaseEntity {
     private Integer quantity;
     @Column
     private Double discount;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
-    @OneToMany(mappedBy = "product")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private List<Gallery> galleries = new ArrayList<>();
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private List<OrderDetails> orderDetails = new ArrayList<>();
 
 }
