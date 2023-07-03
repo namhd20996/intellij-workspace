@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,9 +27,15 @@ public class ProductResource {
         return new ResponseEntity<>(productConverter.productOutPutList(productService.findAllProduct()), HttpStatus.OK);
     }
 
-    @PostMapping("/all/category")
-    public ResponseEntity<List<ProductDTO>> getAllByCategory(@RequestBody CategoryDTO category) {
-        return new ResponseEntity<>(productService.findAllByCategory(category), HttpStatus.OK);
+    @GetMapping("/all/category")
+    public ResponseEntity<List<ProductOutPut>> getAllByCategory(@RequestParam("id") UUID id) {
+        return new ResponseEntity<>(productConverter.productOutPutList(productService.findAllByCategoryId(id)), HttpStatus.OK);
+    }
+
+    @GetMapping("/get-id")
+    public ResponseEntity<ProductDTO> getProductById(@RequestParam("id") UUID id){
+
+        return  null;
     }
 
     @PostMapping("/add")
@@ -45,4 +52,5 @@ public class ProductResource {
     public String delete() {
         return "DELETE:: product controller";
     }
+
 }

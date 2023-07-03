@@ -12,5 +12,5 @@ spring:
         enable_lazy_load_no_trans: true
         format_sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     database-platform: org.hibernate.dialect.SQLServer2012Dialect

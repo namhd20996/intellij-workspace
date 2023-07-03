@@ -21,19 +21,19 @@ public class AssignJavaFiveVersionOneApplication {
         SpringApplication.run(AssignJavaFiveVersionOneApplication.class, args);
     }
 
-    @Bean
-    public CommandLineRunner commandLineRunner(UserRepo userService, RoleRepo roleRepo, UserConverter userConverter) {
-        return args -> {
-            Role a = new Role("ADMIN", "admin:read");
-            Role aa = new Role("ADMIN", "admin:create");
-            Role aaa = new Role("ADMIN", "admin:update");
-            Role aaaa = new Role("ADMIN", "admin:delete");
-            Role u = new Role("USER", "user:read");
-            Role m = new Role("MANAGER", "manager:read");
-            roleRepo.save(a);
-            roleRepo.save(aa);
-            roleRepo.save(aaa);
-            roleRepo.save(aaaa);
-        };
-    }
+//    @Bean
+//    public CommandLineRunner commandLineRunner(UserRepo userService, RoleRepo roleRepo, UserConverter userConverter) {
+//        return args -> {
+//            Role a = new Role("ADMIN", "admin:read");
+//            Role aa = new Role("ADMIN", "admin:create");
+//            Role aaa = new Role("ADMIN", "admin:update");
+//            Role aaaa = new Role("ADMIN", "admin:delete");
+//            Role u = new Role("USER", "user:read");
+//            Role m = new Role("MANAGER", "manager:read");
+//            roleRepo.save(a);
+//            roleRepo.save(aa);
+//            roleRepo.save(aaa);
+//            roleRepo.save(aaaa);
+//        };
+//    }
 }

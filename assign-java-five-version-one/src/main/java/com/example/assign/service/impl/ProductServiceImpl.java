@@ -63,9 +63,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> findAllByCategory(CategoryDTO category) {
+    public List<ProductDTO> findAllByCategoryId(UUID id) {
         CategoryDTO categoryFind = categoryService
-                .findCategoryByIdAndStatus(category.getId(), SystemConstant.STATUS_CATEGORY);
-        return productConverter.toListDTO(productRepo.findAllByCategory(categoryConverter.toEntity(categoryFind)));
+                .findCategoryByIdAndStatus(id, SystemConstant.STATUS_CATEGORY);
+        return productConverter.toListDTO(productRepo.findAllByCategoryId(id));
     }
 }

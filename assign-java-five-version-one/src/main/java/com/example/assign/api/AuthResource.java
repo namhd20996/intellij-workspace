@@ -42,4 +42,9 @@ public class AuthResource {
     public String delete() {
         return "GET:: auth delete";
     }
+
+    @PostMapping("/logout")
+    public String logout()  {
+        return "POST:: auth logout";
+    }
 }

@@ -14,5 +14,5 @@ public interface ProductService {
 
     ProductDTO findOneProductById(UUID id);
 
-    List<ProductDTO> findAllByCategory(CategoryDTO category);
+    List<ProductDTO> findAllByCategoryId(UUID id);
 }
