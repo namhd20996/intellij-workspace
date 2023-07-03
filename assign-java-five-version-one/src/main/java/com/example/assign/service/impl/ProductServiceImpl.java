@@ -1,6 +1,7 @@
 package com.example.assign.service.impl;
 
 import com.example.assign.constant.SystemConstant;
+import com.example.assign.converter.CategoryConverter;
 import com.example.assign.converter.GalleryConverter;
 import com.example.assign.converter.ProductConverter;
 import com.example.assign.dto.CategoryDTO;
@@ -33,9 +34,11 @@ public class ProductServiceImpl implements ProductService {
 
     private final GalleryService galleryService;
 
+    private final CategoryConverter categoryConverter;
+
     @Override
     public ProductDTO addProduct(ProductDTO dto) {
-        CategoryDTO category = categoryService.findCategoryByIdAndStatus(dto.getCategory_key(), SystemConstant.STATUS_AUTH);
+        CategoryDTO category = categoryService.findCategoryByIdAndStatus(dto.getCategory_key(), SystemConstant.STATUS_CATEGORY);
         dto.setCategory(category);
         List<Gallery> galleries = galleryConverter.toListEntity(dto.getGalleries());
 
@@ -57,5 +60,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO findOneProductById(UUID id) {
         return productConverter.toDTO(productRepo.findById(id).get());
+    }
+
+    @Override
+    public List<ProductDTO> findAllByCategory(CategoryDTO category) {
+        CategoryDTO categoryFind = categoryService
+                .findCategoryByIdAndStatus(category.getId(), SystemConstant.STATUS_CATEGORY);
+        return productConverter.toListDTO(productRepo.findAllByCategory(categoryConverter.toEntity(categoryFind)));
     }
 }

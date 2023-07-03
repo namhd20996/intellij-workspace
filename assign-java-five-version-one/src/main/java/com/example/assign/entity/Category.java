@@ -1,9 +1,6 @@
 package com.example.assign.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -26,6 +23,7 @@ public class Category extends BaseEntity {
     private String image;
     @Column
     private Integer status;
+//    @Transient
     @OneToMany(mappedBy = "category")
     private List<Product> products = new ArrayList<>();
 

@@ -1,14 +1,19 @@
 package com.example.assign.dto;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+import java.util.UUID;
+
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GalleryDTO extends BaseDTO<GalleryDTO>{
-
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class GalleryDTO {
+    private UUID id;
     private String thumbnail;
     private ProductDTO product;
 }

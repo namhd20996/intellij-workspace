@@ -2,8 +2,8 @@ package com.example.assign.dto;
 
 import lombok.*;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

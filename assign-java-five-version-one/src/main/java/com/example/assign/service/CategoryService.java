@@ -14,4 +14,8 @@ public interface CategoryService {
     CategoryDTO findOneById(UUID id);
 
     CategoryDTO findCategoryByIdAndStatus(UUID uuid, Integer status);
+
+    List<CategoryDTO> findAllByStatus(Integer status);
+
+    boolean existsByName(String name);
 }

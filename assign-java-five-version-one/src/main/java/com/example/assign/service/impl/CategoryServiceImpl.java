@@ -42,4 +42,14 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDTO findCategoryByIdAndStatus(UUID id, Integer status) {
         return converter.toDTO(categoryRepo.findCategoryByIdAndStatus(id, status));
     }
+
+    @Override
+    public List<CategoryDTO> findAllByStatus(Integer status) {
+        return converter.toListDTO(categoryRepo.findAllByStatus(status));
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return categoryRepo.existsByName(name);
+    }
 }

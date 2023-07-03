@@ -1,5 +1,6 @@
 package com.example.assign.service;
 
+import com.example.assign.dto.CategoryDTO;
 import com.example.assign.dto.ProductDTO;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface ProductService {
     List<ProductDTO> findAllProduct();
 
     ProductDTO findOneProductById(UUID id);
+
+    List<ProductDTO> findAllByCategory(CategoryDTO category);
 }

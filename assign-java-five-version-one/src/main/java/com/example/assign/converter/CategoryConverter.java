@@ -1,11 +1,13 @@
 package com.example.assign.converter;
 
+import com.example.assign.api.output.CategoryOutput;
 import com.example.assign.dto.CategoryDTO;
 import com.example.assign.entity.Category;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,5 +35,24 @@ public class CategoryConverter {
 
     public List<CategoryDTO> toListDTO(List<Category> entities) {
         return Optional.of(entities).map(categories -> List.of(mapper.map(categories, CategoryDTO[].class))).orElse(null);
+    }
+
+    public List<CategoryOutput> toCategoriesOut(List<CategoryDTO> dtoList) {
+        List<CategoryOutput> list = new ArrayList<>();
+        dtoList
+                .forEach(
+                        category -> {
+                            var item = CategoryOutput.builder()
+                                    .id(category.getId())
+                                    .name(category.getName())
+                                    .image(category.getImage())
+                                    .description(category.getDescription())
+                                    .status(category.getStatus())
+                                    .message(category.getMessage())
+                                    .build();
+                            list.add(item);
+                        }
+                );
+        return list;
     }
 }

@@ -1,8 +1,12 @@
 package com.example.assign.dto;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AuthenticationRequest {
 
     private String username;

@@ -1,18 +1,17 @@
-package com.example.assign.dto;
+package com.example.assign.api.output;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class RoleDTO extends BaseTwoDTO<RoleDTO> {
-
-    private String name;
-
-    private String code;
+public class BaseOutput <T>{
+    private List<T> results = new ArrayList<>();
 }

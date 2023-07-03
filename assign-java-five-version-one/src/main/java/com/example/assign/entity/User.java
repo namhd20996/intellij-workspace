@@ -51,8 +51,6 @@ public class User extends BaseEntity implements UserDetails {
     private List<Token> tokens = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     private List<Order> orders = new ArrayList<>();
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<Product> products = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

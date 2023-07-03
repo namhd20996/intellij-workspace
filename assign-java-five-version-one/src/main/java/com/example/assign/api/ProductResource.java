@@ -1,5 +1,8 @@
 package com.example.assign.api;
 
+import com.example.assign.api.output.ProductOutPut;
+import com.example.assign.converter.ProductConverter;
+import com.example.assign.dto.CategoryDTO;
 import com.example.assign.dto.ProductDTO;
 import com.example.assign.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +19,16 @@ public class ProductResource {
 
     private final ProductService productService;
 
+    private final ProductConverter productConverter;
+
     @GetMapping("/all")
-    public ResponseEntity<List<ProductDTO>> get() {
-        return new ResponseEntity<>(productService.findAllProduct(), HttpStatus.OK);
+    public ResponseEntity<List<ProductOutPut>> get() {
+        return new ResponseEntity<>(productConverter.productOutPutList(productService.findAllProduct()), HttpStatus.OK);
+    }
+
+    @PostMapping("/all/category")
+    public ResponseEntity<List<ProductDTO>> getAllByCategory(@RequestBody CategoryDTO category) {
+        return new ResponseEntity<>(productService.findAllByCategory(category), HttpStatus.OK);
     }
 
     @PostMapping("/add")

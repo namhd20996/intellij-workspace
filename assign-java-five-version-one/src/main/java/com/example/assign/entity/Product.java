@@ -32,9 +32,6 @@ public class Product extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private List<Gallery> galleries = new ArrayList<>();
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)

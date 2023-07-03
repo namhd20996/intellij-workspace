@@ -5,18 +5,18 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@Builder
 public class UserDTO extends BaseDTO<UserDTO> {
     private String username;
     private String password;
     private String email;
     private String firstname;
     private String lastname;
-    private Boolean status;
+    private Integer status;
     private List<RoleDTO> roles = new ArrayList<>();
     private List<TokenDTO> tokens = new ArrayList<>();
     private List<OrderDTO> orders = new ArrayList<>();
