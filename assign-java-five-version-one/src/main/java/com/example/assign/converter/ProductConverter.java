@@ -1,7 +1,7 @@
 package com.example.assign.converter;
 
-import com.example.assign.api.output.GalleryOutput;
-import com.example.assign.api.output.ProductOutPut;
+import com.example.assign.api.output.GalleryResp;
+import com.example.assign.api.output.ProductResp;
 import com.example.assign.dto.ProductDTO;
 import com.example.assign.entity.Product;
 import lombok.RequiredArgsConstructor;
@@ -31,35 +31,26 @@ public class ProductConverter {
     }
 
     public List<Product> toListEntity(List<ProductDTO> dtoList) {
-        return Optional.of(dtoList).map(products -> List.of(mapper.map(products, Product[].class))).orElse(null);
+        return Optional.of(dtoList)
+                .map(products -> List.of(mapper.map(products, Product[].class)))
+                .orElse(null);
     }
 
     public List<ProductDTO> toListDTO(List<Product> entities) {
-        return Optional.of(entities).map(products -> List.of(mapper.map(products, ProductDTO[].class))).orElse(null);
+        return Optional.of(entities)
+                .map(products -> List.of(mapper.map(products, ProductDTO[].class)))
+                .orElse(null);
     }
 
-    public List<ProductOutPut> productOutPutList(List<ProductDTO> dtoList) {
-        List<ProductOutPut> list = new ArrayList<>();
-        dtoList
-                .forEach(product -> {
-                    var productOut = ProductOutPut.builder()
-                            .id(product.getId())
-                            .createdDate(product.getCreatedDate())
-                            .createdBy(product.getCreatedBy())
-                            .lastModifiedDate(product.getLastModifiedDate())
-                            .lastModifiedBy(product.getLastModifiedBy())
-                            .name(product.getName())
-                            .price(product.getPrice())
-                            .quantity(product.getQuantity())
-                            .shortDescription(product.getShortDescription())
-                            .longDescription(product.getLongDescription())
-                            .category_id(product.getCategory().getId())
-                            .discount(product.getDiscount())
-                            .galleries(List.of(
-                                    mapper.map(product.getGalleries(), GalleryOutput[].class)))
-                            .build();
-                    list.add(productOut);
-                });
-        return list;
+    public List<ProductResp> productOutPutList(List<ProductDTO> dtoList) {
+        return Optional.of(dtoList)
+                .map(products -> List.of(mapper.map(products, ProductResp[].class)))
+                .orElse(null);
+    }
+
+    public ProductResp productOutPut(ProductDTO dto) {
+        return Optional.ofNullable(dto)
+                .map(product -> mapper.map(product, ProductResp.class))
+                .orElse(null);
     }
 }

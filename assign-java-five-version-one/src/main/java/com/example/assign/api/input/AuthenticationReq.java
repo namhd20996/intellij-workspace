@@ -1,4 +1,4 @@
-package com.example.assign.dto;
+package com.example.assign.api.input;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AuthenticationRequest {
+public class AuthenticationReq {
 
     private String username;
 

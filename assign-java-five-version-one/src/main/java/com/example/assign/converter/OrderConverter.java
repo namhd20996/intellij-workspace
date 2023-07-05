@@ -1,5 +1,6 @@
 package com.example.assign.converter;
 
+import com.example.assign.api.output.OrderResp;
 import com.example.assign.dto.OrderDTO;
 import com.example.assign.entity.Order;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +34,27 @@ public class OrderConverter {
 
     public List<OrderDTO> toListDTO(List<Order> entities) {
         return Optional.of(entities).map(orders -> List.of(mapper.map(orders, OrderDTO[].class))).orElse(null);
+    }
+
+    public OrderResp orderDTOResp(OrderDTO dto) {
+        return Optional.ofNullable(dto)
+                .map(order -> mapper.map(order, OrderResp.class))
+                .orElse(null);
+    } public OrderResp orderResp(Order entity) {
+        return Optional.ofNullable(entity)
+                .map(order -> mapper.map(order, OrderResp.class))
+                .orElse(null);
+    }
+
+    public List<OrderResp> orderDTOResp(List<OrderDTO> dtoList) {
+        return Optional.of(dtoList)
+                .map(orders -> List.of(mapper.map(orders, OrderResp[].class)))
+                .orElse(null);
+    }
+
+    public List<OrderResp> orderResp(List<Order> entities) {
+        return Optional.of(entities)
+                .map(orders -> List.of(mapper.map(orders, OrderResp[].class)))
+                .orElse(null);
     }
 }

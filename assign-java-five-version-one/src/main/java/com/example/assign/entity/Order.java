@@ -3,18 +3,22 @@ package com.example.assign.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Nationalized;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "_order")
 public class Order {
 
@@ -29,18 +33,17 @@ public class Order {
     @CreatedDate
     private Date orderDate;
     @Column
-    private Double price;
-    @Column
-    private Integer quantity;
-    @Column
+    @Nationalized
     private String fullName;
     @Column
     private String email;
     @Column
     private String phoneNumber;
-    @Column
+    @Column(length = 512)
+    @Nationalized
     private String address;
     @Column
+    @Nationalized
     private String note;
     @Column
     private Integer status;

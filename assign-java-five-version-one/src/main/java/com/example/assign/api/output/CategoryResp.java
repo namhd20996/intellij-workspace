@@ -1,6 +1,5 @@
 package com.example.assign.api.output;
 
-import com.example.assign.dto.CategoryDTO;
 import lombok.*;
 
 import java.util.UUID;
@@ -10,7 +9,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryOutput extends BaseOutput<CategoryDTO> {
+public class CategoryResp {
 
     private UUID id;
     private String name;

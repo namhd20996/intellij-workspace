@@ -1,28 +1,26 @@
-package com.example.assign.dto;
+package com.example.assign.api.output;
 
-import com.example.assign.api.output.ProductOut;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class OrderDTO extends BaseDTO<OrderDTO> {
+public class OrderResp {
 
+    private UUID id;
     private Date orderDate;
     private String fullName;
     private String email;
     private String phoneNumber;
     private String address;
-    private String note;
-    private Integer status;
     private Double totalMoney;
-    private UserDTO user;
-    private List<OrderDetailsDTO> orderDetails = new ArrayList<>();
+    private String message;
     private List<ProductOut> products = new ArrayList<>();
 }

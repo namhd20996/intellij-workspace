@@ -1,6 +1,5 @@
 package com.example.assign.api.output;
 
-import com.example.assign.dto.GalleryDTO;
 import lombok.*;
 
 import java.util.UUID;
@@ -10,7 +9,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GalleryOutput extends BaseOutput<GalleryDTO>{
+public class GalleryResp {
 
     private UUID id;
     private String thumbnail;

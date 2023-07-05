@@ -1,6 +1,6 @@
 package com.example.assign.api;
 
-import com.example.assign.api.output.CategoryOutput;
+import com.example.assign.api.output.CategoryResp;
 import com.example.assign.converter.CategoryConverter;
 import com.example.assign.dto.CategoryDTO;
 import com.example.assign.service.CategoryService;
@@ -30,7 +30,7 @@ public class CategoryResource {
     }
 
     @GetMapping("/get-all")
-    public ResponseEntity<List<CategoryOutput>> getAllStatus() {
-        return new ResponseEntity<>(categoryConverter.toCategoriesOut(categoryService.findAllByStatus(1)), HttpStatus.OK);
+    public ResponseEntity<List<CategoryResp>> getAllStatus() {
+        return new ResponseEntity<>(categoryConverter.categoryResp(categoryService.findAllByStatus(1)), HttpStatus.OK);
     }
 }

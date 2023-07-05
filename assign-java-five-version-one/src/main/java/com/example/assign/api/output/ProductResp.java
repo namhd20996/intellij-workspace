@@ -1,8 +1,5 @@
 package com.example.assign.api.output;
 
-import com.example.assign.dto.CategoryDTO;
-import com.example.assign.dto.GalleryDTO;
-import com.example.assign.dto.ProductDTO;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -15,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductOutPut extends BaseOutput<ProductDTO> {
+public class ProductResp {
     private UUID id;
     private Date createdDate;
     private Date lastModifiedDate;
@@ -27,6 +24,6 @@ public class ProductOutPut extends BaseOutput<ProductDTO> {
     private Double price;
     private Integer quantity;
     private Double discount;
-    private UUID category_id;
-    private List<GalleryOutput> galleries = new ArrayList<>();
+    private CategoryResp category;
+    private List<GalleryResp> galleries = new ArrayList<>();
 }

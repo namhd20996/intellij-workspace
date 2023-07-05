@@ -1,5 +1,7 @@
 package com.example.assign.api;
 
+import com.example.assign.api.output.AuthenticationResp;
+import com.example.assign.converter.UserConverter;
 import com.example.assign.dto.UserDTO;
 import com.example.assign.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -14,23 +16,24 @@ public class AuthResource {
 
     private final UserService userService;
 
+    private final UserConverter userConverter;
+
     @GetMapping("/get")
     public String get() {
         return "GET:: auth get";
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<UserDTO> authenticate(@RequestBody UserDTO dto) {
-        return new ResponseEntity<>(userService.authenticate(dto), HttpStatus.OK);
+    public ResponseEntity<AuthenticationResp> authenticate(@RequestBody UserDTO dto) {
+        return new ResponseEntity<>(userConverter.authenticationResp(userService.authenticate(dto)), HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> register(@RequestBody UserDTO dto) {
+    public ResponseEntity<AuthenticationResp> register(@RequestBody UserDTO dto) {
         if (userService.existsUserByUsername(dto.getUsername())) {
-            dto.setMessage("Username is taken!..");
-            return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(AuthenticationResp.builder().message("User is taken!..").build(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(userService.register(dto), HttpStatus.CREATED);
+        return new ResponseEntity<>(userConverter.authenticationResp(userService.register(dto)), HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
@@ -44,7 +47,7 @@ public class AuthResource {
     }
 
     @PostMapping("/logout")
-    public String logout()  {
+    public String logout() {
         return "POST:: auth logout";
     }
 }

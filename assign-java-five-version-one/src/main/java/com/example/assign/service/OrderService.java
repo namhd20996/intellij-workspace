@@ -1,5 +1,6 @@
 package com.example.assign.service;
 
+import com.example.assign.api.output.OrderResp;
 import com.example.assign.dto.OrderDTO;
 import com.example.assign.entity.Order;
 
@@ -14,5 +15,5 @@ public interface OrderService {
 
     OrderDTO findOrderById(UUID id);
 
-    OrderDTO addOrder(OrderDTO dto);
+    OrderResp addOrder(OrderDTO dto);
 }

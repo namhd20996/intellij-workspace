@@ -1,27 +1,28 @@
 package com.example.assign.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.Nationalized;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "_product")
 public class Product extends BaseEntity {
 
-    @Column
+    @Column(length = 512)
+    @Nationalized
     private String name;
     @Column
+    @Nationalized
     private String shortDescription;
-    @Column
+    @Column(length = 512)
+    @Nationalized
     private String longDescription;
     @Column
     private Double price;
@@ -29,6 +30,8 @@ public class Product extends BaseEntity {
     private Integer quantity;
     @Column
     private Double discount;
+    @Column
+    private Integer status;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;

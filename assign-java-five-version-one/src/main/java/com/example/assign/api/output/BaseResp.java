@@ -12,6 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class BaseOutput <T>{
+public class BaseResp<T>{
     private List<T> results = new ArrayList<>();
 }

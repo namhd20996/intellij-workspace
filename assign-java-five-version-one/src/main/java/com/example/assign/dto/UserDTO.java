@@ -17,6 +17,7 @@ public class UserDTO extends BaseDTO<UserDTO> {
     private String firstname;
     private String lastname;
     private Integer status;
+    private String avatar;
     private List<RoleDTO> roles = new ArrayList<>();
     private List<TokenDTO> tokens = new ArrayList<>();
     private List<OrderDTO> orders = new ArrayList<>();

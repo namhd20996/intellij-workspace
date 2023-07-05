@@ -9,6 +9,7 @@ spring:
     database: sql_server
     properties:
       hibernate:
+#        use_nationalized_character_data: true
         enable_lazy_load_no_trans: true
         format_sql: true
     hibernate:

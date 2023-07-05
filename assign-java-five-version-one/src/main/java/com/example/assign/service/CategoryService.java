@@ -18,4 +18,5 @@ public interface CategoryService {
     List<CategoryDTO> findAllByStatus(Integer status);
 
     boolean existsByName(String name);
+
 }

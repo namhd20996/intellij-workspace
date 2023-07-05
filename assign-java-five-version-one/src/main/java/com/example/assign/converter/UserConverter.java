@@ -1,5 +1,6 @@
 package com.example.assign.converter;
 
+import com.example.assign.api.output.AuthenticationResp;
 import com.example.assign.dto.UserDTO;
 import com.example.assign.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class UserConverter {
     }
 
     public UserDTO toDTO(User entity) {
-        return  Optional.ofNullable(entity)
+        return Optional.ofNullable(entity)
                 .map(user -> mapper.map(user, UserDTO.class))
                 .orElse(null);
     }
@@ -33,5 +34,17 @@ public class UserConverter {
 
     public List<UserDTO> toListDTO(List<User> entities) {
         return Optional.of(List.of(mapper.map(entities, UserDTO[].class))).orElse(null);
+    }
+
+    public AuthenticationResp authenticationResp(UserDTO dto) {
+        return Optional.ofNullable(dto)
+                .map(user -> mapper.map(user, AuthenticationResp.class))
+                .orElse(null);
+    }
+
+    public List<AuthenticationResp> authenticationResp(List<UserDTO> dtoList) {
+        return Optional.of(dtoList)
+                .map(users -> List.of(mapper.map(users, AuthenticationResp[].class)))
+                .orElse(null);
     }
 }

@@ -1,8 +1,7 @@
 package com.example.assign.api;
 
-import com.example.assign.api.output.ProductOutPut;
+import com.example.assign.api.output.ProductResp;
 import com.example.assign.converter.ProductConverter;
-import com.example.assign.dto.CategoryDTO;
 import com.example.assign.dto.ProductDTO;
 import com.example.assign.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +22,18 @@ public class ProductResource {
     private final ProductConverter productConverter;
 
     @GetMapping("/all")
-    public ResponseEntity<List<ProductOutPut>> get() {
+    public ResponseEntity<List<ProductResp>> get() {
         return new ResponseEntity<>(productConverter.productOutPutList(productService.findAllProduct()), HttpStatus.OK);
     }
 
     @GetMapping("/all/category")
-    public ResponseEntity<List<ProductOutPut>> getAllByCategory(@RequestParam("id") UUID id) {
+    public ResponseEntity<List<ProductResp>> getAllByCategory(@RequestParam("id") UUID id) {
         return new ResponseEntity<>(productConverter.productOutPutList(productService.findAllByCategoryId(id)), HttpStatus.OK);
     }
 
     @GetMapping("/get-id")
-    public ResponseEntity<ProductDTO> getProductById(@RequestParam("id") UUID id){
-
-        return  null;
+    public ResponseEntity<ProductResp> getProductById(@RequestParam("id") UUID id) {
+        return new ResponseEntity<>(productConverter.productOutPut(productService.findOneProductById(id)), HttpStatus.OK);
     }
 
     @PostMapping("/add")

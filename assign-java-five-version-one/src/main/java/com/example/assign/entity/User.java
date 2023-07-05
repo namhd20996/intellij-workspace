@@ -2,6 +2,7 @@ package com.example.assign.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Nationalized;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,8 +12,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,17 +23,21 @@ public class User extends BaseEntity implements UserDetails {
 
     @Column
     private String username;
-    @Column
+    @Column(length = 512)
+    @Nationalized
     private String password;
     @Column
     private String email;
     @Column
+    @Nationalized
     private String firstname;
     @Column
+    @Nationalized
     private String lastname;
     @Column
     private Integer status;
-    @Column
+    @Column(length = 512)
+    @Nationalized
     private String address;
     @Column
     private String phone;

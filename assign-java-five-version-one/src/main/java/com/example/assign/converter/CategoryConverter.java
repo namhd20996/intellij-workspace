@@ -1,6 +1,6 @@
 package com.example.assign.converter;
 
-import com.example.assign.api.output.CategoryOutput;
+import com.example.assign.api.output.CategoryResp;
 import com.example.assign.dto.CategoryDTO;
 import com.example.assign.entity.Category;
 import lombok.RequiredArgsConstructor;
@@ -37,22 +37,15 @@ public class CategoryConverter {
         return Optional.of(entities).map(categories -> List.of(mapper.map(categories, CategoryDTO[].class))).orElse(null);
     }
 
-    public List<CategoryOutput> toCategoriesOut(List<CategoryDTO> dtoList) {
-        List<CategoryOutput> list = new ArrayList<>();
-        dtoList
-                .forEach(
-                        category -> {
-                            var item = CategoryOutput.builder()
-                                    .id(category.getId())
-                                    .name(category.getName())
-                                    .image(category.getImage())
-                                    .description(category.getDescription())
-                                    .status(category.getStatus())
-                                    .message(category.getMessage())
-                                    .build();
-                            list.add(item);
-                        }
-                );
-        return list;
+    public CategoryResp categoryResp(CategoryDTO dto) {
+        return Optional.ofNullable(dto)
+                .map(category -> mapper.map(category, CategoryResp.class))
+                .orElse(null);
+    }
+
+    public List<CategoryResp> categoryResp(List<CategoryDTO> dtoList) {
+        return Optional.of(dtoList)
+                .map(categories -> List.of(mapper.map(categories, CategoryResp[].class)))
+                .orElse(null);
     }
 }
