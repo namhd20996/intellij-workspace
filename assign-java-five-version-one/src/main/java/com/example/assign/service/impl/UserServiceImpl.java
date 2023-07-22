@@ -53,8 +53,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO register(UserDTO dto) {
-        User user = null;
-        UserDTO userDTO = null;
+        User user;
+        UserDTO userDTO;
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         if (dto.getId() != null) {
             user = userRepo.findUserByUsernameAndStatus(dto.getUsername(), SystemConstant.STATUS_AUTH).get();

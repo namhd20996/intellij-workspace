@@ -1,6 +1,5 @@
 package com.example.assign.converter;
 
-import com.example.assign.api.output.GalleryResp;
 import com.example.assign.api.output.ProductResp;
 import com.example.assign.dto.ProductDTO;
 import com.example.assign.entity.Product;
@@ -8,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
