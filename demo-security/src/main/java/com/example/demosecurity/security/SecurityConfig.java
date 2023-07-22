@@ -30,40 +30,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable() // bật tính năng này lên giúp không xuất hiện đoạn mã XSRF-TOKEN trong cookie để bị người khác xâm nhập khi không cần password vẫn có thể sử dụng được
-                .authorizeRequests()
-                .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
+                .cors()
+                .and()
+                .csrf()
+                .disable()
+                .authorizeHttpRequests()
+                .antMatchers("/login/**", "/index", "/home-page")
+                .permitAll()
                 .antMatchers("/api/student/**").hasAnyRole(STUDENT.name(), ADMIN.name(), ADMINTRAINEE.name())
-//                .antMatchers(HttpMethod.DELETE,"/api/manager/**").hasAuthority(COURSE_WRITE.getPermission())
-//                .antMatchers(HttpMethod.POST, "/api/manager/**").hasAuthority(COURSE_WRITE.getPermission())
-//                .antMatchers(HttpMethod.PUT, "/api/manager/**").hasAuthority(COURSE_WRITE.getPermission())
-//                .antMatchers("/api/manager/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
                 .anyRequest()
                 .authenticated()
                 .and()
                 .formLogin()
-                    .loginPage("/login")
-                    .permitAll()
+                    .loginPage("/login") // khi có request /login nó sẽ chuyển đến controller có url là /login để trả về
                     .usernameParameter("username")
                     .passwordParameter("password")
-                    .defaultSuccessUrl("/course", true)
-                    .failureUrl("/login?error=true")
+                    .defaultSuccessUrl("/courses", true)
+                    .failureUrl("/login?incorrectAccount=error")
+                    .loginProcessingUrl("/login-check")
                 .and()
-                .sessionManagement()
-                    .invalidSessionUrl("/login") // Hết time sẽ trả về url nào
-                .and()
-                .rememberMe()
+                .rememberMe() // Mặc định lưu 2 tuần
                     .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
                     .key("somethingverysecured")
-                    .rememberMeParameter("remember-me")
                 .and()
                 .logout()
+                    .logoutUrl("/logout")
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
                     .clearAuthentication(true)
                     .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID", "remember-me") // loại bỏ cookies đang được lưu trên web
-                    .logoutSuccessUrl("/login")
-               ;
+                    .deleteCookies("JSESSIONID", "remember-me")
+                    .logoutSuccessUrl("/login");
     }
 
     @Override

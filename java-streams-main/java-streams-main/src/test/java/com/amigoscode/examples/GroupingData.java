@@ -22,7 +22,6 @@ public class GroupingData {
             cars.forEach(System.out::println);
             System.out.println("---------------------");
         });
-
     }
 
     @Test

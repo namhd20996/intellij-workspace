@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+<div class="container">
+    <div class="col-sm-4 offset-sm-4">
+        <form method="POST" th:object="${student}">
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input th:field="*{email}" id="email" type="email" placeholder="abc@gmail.com" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="fullname">Full name</label>
+                <input th:field="*{fullname}" id="fullname" type="text" placeholder="Tèo ABC" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="marks">Điểm</label>
+                <input th:field="*{marks}" id="marks" type="text" placeholder="Điểm" class="form-control">
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input th:field="*{gender}" class="form-check-input" type="radio" name="gender" id="inlineRadio1"
+                       value="Nam">
+                <label class="form-check-label" for="inlineRadio1">Male</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input th:field="*{gender}" class="form-check-input" type="radio" name="gender" id="inlineRadio2"
+                       value="Nu">
+                <label class="form-check-label" for="inlineRadio2">Female</label>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Example select</label>
+                <select th:field="*{country}" name="country" class="form-control" id="exampleFormControlSelect1">
+                    <option value="">Select country</option>
+                    <option value="VN">Việt Nam</option>
+                    <option value="US">Mỹ</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button th:formaction="@{/student/create}" class="btn btn-primary">Thêm</button>
+                <button th:formaction="@{|/student/update/${key}|}" class="btn btn-danger">Sửa</button>
+                <button formmethod="get" th:formaction="@{|/student/delete/${key}|}" class="btn btn-success">Xóa</button>
+                <button type="reset" class="btn btn-info">Mới</button>
+            </div>
+        </form>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Email</th>
+            <th scope="col">Full name</th>
+            <th scope="col">Mark</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Country</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry: ${students}" th:object="${entry.value}">
+            <td th:text="*{email}"></td>
+            <td th:text="*{fullname}"></td>
+            <td th:text="*{marks}"></td>
+            <td th:text="*{gender != null} ? (*{gender.equals('Nam')} ? 'Nam' : (*{gender.equals('Nu')} ? 'Nữ')) : 'Other'"></td>
+            <td th:text="*{country}"></td>
+            <td>
+                <a th:href="@{|/student/edit/${entry.key}|}" class="btn btn-info">Edit</a>
+                <a th:href="@{|/student/delete/${entry.key}|}" class="btn btn-info">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+
+</html>

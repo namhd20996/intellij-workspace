@@ -18,8 +18,7 @@ public class Main {
 
     @Test
     public void exerciseOne() {
-        students
-                .forEach(System.out::println);
+        students.forEach(System.out::println);
     }
 
     @Test
@@ -30,6 +29,7 @@ public class Main {
                 .map(Math::sqrt)
                 .peek(System.out::println)
                 .toList();
+        System.out.println(doubles);
     }
 
     @Test

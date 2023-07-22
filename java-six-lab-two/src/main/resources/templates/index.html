@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--Có thể dùng 2 cách để import layout-->
+<nav th:replace="layout/menu::menu"></nav>
+<nav th:include="~{layout/menu.html}"></nav>
+<h1 th:text="${message}"></h1>
+</body>
+</html>

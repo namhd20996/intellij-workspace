@@ -69,11 +69,11 @@ public class AccountController {
         if (position >= 0) {
             account.setPhoto(fileName);
             list.set(position, account);
-            System.out.println("Update Succes " + account.getUsername());
+            System.out.println("Update Success " + account.getUsername());
         } else {
             account.setPhoto(fileName);
             list.add(account);
-            System.out.println("Insert Succes " + account.getUsername());
+            System.out.println("Insert Success " + account.getUsername());
         }
         return model;
     }

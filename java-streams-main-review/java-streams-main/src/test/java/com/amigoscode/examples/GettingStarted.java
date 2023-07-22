@@ -37,7 +37,7 @@ public class GettingStarted {
     public void declaretiveApproachUsingStreams() throws IOException {
         List<Person> peoples = MockData.getPeople();
         List<Person> youngPeople = peoples.stream()
-                .filter(person -> person.getAge() <= 18)
+                .filter(p -> p.getAge() <= 18)
                 .limit(10)
                 .collect(Collectors.toList());
         youngPeople.forEach(System.out::println);

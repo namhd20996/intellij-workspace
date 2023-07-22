@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <nav th:replace="layout/menu::menu"></nav>
+    <ul th:object="${student}">
+        <li th:text="*{name}"></li>
+        <li th:text="*{gender} ?'Nam':'Nữ'"></li>
+        <li th:text="*{mark}"></li>
+    </ul>
+</body>
+</html>

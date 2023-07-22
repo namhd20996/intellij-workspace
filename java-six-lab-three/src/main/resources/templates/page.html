@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:with="y='Polytechnic'">
+<div th:replace="~{frags::frag1}"></div>
+<hr>
+<div th:replace="frags::frag2(~{::#x/text()},${y})"></div>
+<i id="x" th:remove="all">FPT</i>
+</body>
+</html>

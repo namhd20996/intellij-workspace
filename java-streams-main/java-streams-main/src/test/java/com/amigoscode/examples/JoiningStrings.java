@@ -30,7 +30,7 @@ public class JoiningStrings {
         // "Anna, John, Marcos, Helena, Yasmin"
         String join = names.stream()
                 .map(name -> name.substring(0, 1).toUpperCase() + name.substring(1))
-                .collect(Collectors.joining("|"));
+                .collect(Collectors.joining(","));
         System.out.println(join);
 
     }

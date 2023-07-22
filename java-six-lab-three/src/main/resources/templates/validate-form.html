@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/css/boostrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 offset-sm-3">
+            <form th:action="@{/form-validate}" method="post" th:object="${student}">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input id="email"
+                           name="email"
+                           class="form-control"
+                           th:value="*{email}"
+                           type="email"/>
+                    <i th:errors="*{email}"></i>
+                </div>
+                <div class="form-group">
+                    <label for="fullName">Full name</label>
+                    <input id="fullName"
+                           name="fullName"
+                           class="form-control"
+                           th:value="*{fullName}"
+                           type="text"/>
+                    <i th:errors="*{fullName}"></i>
+                </div>
+                <div class="form-group">
+                    <label for="average">Average</label>
+                    <input id="average"
+                           name="average"
+                           class="form-control"
+                           th:value="*{average}"
+                           type="number"/>
+                    <i th:errors="*{average}"></i>
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <label for="male">
+                        Male
+                        <input id="male"
+                               name="gender"
+                               th:value="true"
+                               th:field="*{gender}"
+                               type="radio"/>
+                    </label>
+                    <label for="female">
+                        Female
+                        <input id="female"
+                               name="gender"
+                               th:value="false"
+                               th:field="*{gender}"
+                               type="radio"/>
+                    </label>
+                    <i th:errors="*{gender}"></i>
+                </div>
+                <div class="form-group">
+                    <select th:field="*{country}" class="form-control">
+                        <option value="">Nationality?</option>
+                        <option value="vn">Việt Nam</option>
+                        <option value="us">Mỹ</option>
+                    </select>
+                    <i th:errors="*{country}"></i>
+                </div>
+                <button class="btn btn-info" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,7 +33,7 @@ public class TransformationsWithFlatMap {
     @Test
     public void withFlatMap() throws Exception {
         List<String> names = arrayListOfNames.stream()
-                .flatMap(str -> str.stream())
+                .flatMap(Collection::stream)
                 .collect(Collectors.toList());
         System.out.println(names);
     }

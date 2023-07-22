@@ -1,0 +1,26 @@
+spring:
+  thymeleaf:
+    cache: false
+    mode: HTML
+    encoding: UTF-8
+    prefix: file:src/main/resources/templates/
+  web:
+    resources:
+      cache:
+        period: 0
+      static-locations: file:src/main/resources/static/
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=java_six_lab_five;encrypt=true;trustServerCertificate=true;sslProtocol=TLSv1.2
+    username: sa
+    password: 123
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    show-sql: true
+    database: sql_server
+    properties:
+      hibernate:
+        format_sql: true
+        enable_lazy_load_no_trans: true
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.SQLServer2012Dialect

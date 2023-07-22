@@ -24,6 +24,6 @@ public class SpringEmailLearningApplication {
 //    @Scheduled(fixedDelay = 3000, initialDelay = 5000)
     public void sendEmail(){
         mailService.push("namhdps25979@fpt.edu.vn","Gửi từ Duy Nam", "This 1 is body");
-//        mailService.run();
+        mailService.run();
     }
 }

@@ -52,7 +52,6 @@ import java.util.stream.Collectors;
         List<String> list = optionals.stream()
                 .flatMap(Optional::stream)
                 .collect(Collectors.toList());
-
         System.out.println(list);
     }
 }

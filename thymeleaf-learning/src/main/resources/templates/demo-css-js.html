@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--Syntax: @{/URL} @ là đường dẫn ngữ cảnh của ứng dụng-->
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+    <script th:src="@{/js/main.js}"></script>
+</head>
+<body>
+    <h1 class="header-demo">Hello Thymeleaf</h1>
+    <button type="button" th:onclick="demo()">Click me</button>
+</body>
+</html>

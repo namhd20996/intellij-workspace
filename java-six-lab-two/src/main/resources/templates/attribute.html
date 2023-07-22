@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav th:replace="layout/menu::menu"></nav>
+<ul>
+    <li th:each="sv, state: ${students}">
+<!--        <a th:text="${sv.name}" th:href="@{/attribute(index=${state.index})}"></a>-->
+                <a th:text="${sv.name}" th:href="@{|/attribute?index=${state.index}|}"></a>
+    </li>
+    <li></li>
+</ul>
+<ul th:object="${student}">
+    <li><i>Name:<b th:text="*{name}"></b> </i></li>
+    <li><i>Mark: <b th:text="*{mark}"></b></i></li>
+    <li><i>Gender: <b th:text="*{gender}?'Nam':'Nu'"></b></i></li>
+    <li><i>Contact: <b th:text="*{contact.email}"></b></i></li>
+    <li><i>Subject:</i>
+        <ul>
+            <li th:each="subject:*{subjects}">
+                <b th:text="${subject}"></b>
+            </li>
+        </ul>
+    </li>
+    <li th:switch="*{#arrays.length(subjects)}">
+        <i>Time:</i>
+        <b th:case="1">Moi vao</b>
+        <b th:case="2">Dang hoc</b>
+        <b th:case="*">Sap ra truong</b>
+    </li>
+    <li th:if="*{mark>9}"><i>Title:</i> <b>gold bee</b></li>
+</ul>
+</body>
+</html>
