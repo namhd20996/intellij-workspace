@@ -1,6 +1,7 @@
 package com.example.assign.dto;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
@@ -15,5 +16,6 @@ import java.util.UUID;
 public class GalleryDTO {
     private UUID id;
     private String thumbnail;
+    @JsonIgnore
     private ProductDTO product;
 }

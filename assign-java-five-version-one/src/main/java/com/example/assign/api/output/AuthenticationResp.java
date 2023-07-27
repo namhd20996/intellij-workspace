@@ -15,5 +15,4 @@ public class AuthenticationResp {
     private String lastname;
     private String avatar;
     private String token;
-    private String message;
 }

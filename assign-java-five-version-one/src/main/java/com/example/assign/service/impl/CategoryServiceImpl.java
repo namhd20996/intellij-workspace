@@ -3,6 +3,7 @@ package com.example.assign.service.impl;
 import com.example.assign.converter.CategoryConverter;
 import com.example.assign.dto.CategoryDTO;
 import com.example.assign.entity.Category;
+import com.example.assign.exception.ApiRequestException;
 import com.example.assign.repo.CategoryRepo;
 import com.example.assign.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -35,12 +36,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO findOneById(UUID id) {
-        return converter.toDTO(categoryRepo.findById(id).get());
+        Category category = categoryRepo.findById(id)
+                .orElseThrow(() -> new ApiRequestException("Category id: " + id + "not found!.."));
+        return converter.toDTO(category);
     }
 
     @Override
     public CategoryDTO findCategoryByIdAndStatus(UUID id, Integer status) {
-        return converter.toDTO(categoryRepo.findCategoryByIdAndStatus(id, status));
+        Category category = categoryRepo.findCategoryByIdAndStatus(id, status).orElseThrow(() -> new ApiRequestException("Category id: " + id + " not found!.."));
+        return converter.toDTO(category);
     }
 
     @Override

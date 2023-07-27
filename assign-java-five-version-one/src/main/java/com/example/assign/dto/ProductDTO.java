@@ -1,5 +1,6 @@
 package com.example.assign.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -20,8 +21,10 @@ public class ProductDTO extends BaseDTO<ProductDTO> {
     private Integer quantity;
     private Double discount;
     private UUID category_key;
+    @JsonIgnore
     private UserDTO user;
     private CategoryDTO category;
     private List<GalleryDTO> galleries = new ArrayList<>();
+    @JsonIgnore
     private List<OrderDetailsDTO> orderDetails = new ArrayList<>();
 }

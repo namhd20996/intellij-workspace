@@ -24,21 +24,11 @@ public class HomeController extends HttpServlet {
         String action = req.getServletPath();
         final String url = "/WEB-INF/views/";
         switch (action) {
-            case "/home-page":
-                doGetUtil(req, resp, url + "home.jsp");
-                break;
-            case "/login":
-                doGetUtil(req, resp, url + "login.jsp");
-                break;
-            case "/user/edit":
-                doGetEdit(req, resp, url + "home.jsp");
-                break;
-            case "/user/delete":
-                doGetDelete(req, resp, url + "home.jsp");
-                break;
-            case "/logout":
-                doGetLogout(req, resp, url + "login.jsp");
-                break;
+            case "/home-page" -> doGetUtil(req, resp, url + "home.jsp");
+            case "/login" -> doGetUtil(req, resp, url + "login.jsp");
+            case "/user/edit" -> doGetEdit(req, resp, url + "home.jsp");
+            case "/user/delete" -> doGetDelete(req, resp, url + "home.jsp");
+            case "/logout" -> doGetLogout(req, resp, url + "login.jsp");
         }
     }
 
@@ -46,18 +36,10 @@ public class HomeController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getServletPath();
         switch (action) {
-            case "/login":
-                doPostLogin(req, resp);
-                break;
-            case "/user/create":
-                doPostCreate(req, resp);
-                break;
-            case "/user/update":
-                doPostUpdate(req, resp);
-                break;
-            case "/user/delete":
-                doGetDelete(req, resp, "/WEB-INF/views/home.jsp");
-                break;
+            case "/login" -> doPostLogin(req, resp);
+            case "/user/create" -> doPostCreate(req, resp);
+            case "/user/update" -> doPostUpdate(req, resp);
+            case "/user/delete" -> doGetDelete(req, resp, "/WEB-INF/views/home.jsp");
         }
     }
 

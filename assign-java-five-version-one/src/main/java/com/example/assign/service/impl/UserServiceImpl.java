@@ -6,6 +6,7 @@ import com.example.assign.dto.UserDTO;
 import com.example.assign.entity.Role;
 import com.example.assign.entity.Token;
 import com.example.assign.entity.User;
+import com.example.assign.exception.ApiRequestException;
 import com.example.assign.repo.RoleRepo;
 import com.example.assign.repo.TokenRepo;
 import com.example.assign.repo.UserRepo;
@@ -15,12 +16,15 @@ import com.example.assign.sysenum.TokenType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -57,12 +61,14 @@ public class UserServiceImpl implements UserService {
         UserDTO userDTO;
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         if (dto.getId() != null) {
-            user = userRepo.findUserByUsernameAndStatus(dto.getUsername(), SystemConstant.STATUS_AUTH).get();
+            user = userRepo.findUserByUsernameAndStatus(dto.getUsername(), SystemConstant.STATUS_AUTH)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found!..."));
             user.setFirstname(dto.getFirstname());
             user.setLastname(dto.getLastname());
         } else {
             user = converter.toEntity(dto);
             user.setStatus(1);
+//            List<Role> roles = roleRepo.findRoleByCode("admin:create").stream().toList();
             List<Role> roles = roleRepo.findRolesByName("ADMIN");
             user.setRoles(roles);
         }
@@ -82,13 +88,38 @@ public class UserServiceImpl implements UserService {
                         dto.getPassword()
                 )
         );
-        User user = userRepo.findUserByUsernameAndStatus(dto.getUsername(), SystemConstant.STATUS_AUTH).get();
+        User user = userRepo.findUserByUsernameAndStatus(dto.getUsername(), SystemConstant.STATUS_AUTH)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found!..."));
         UserDTO userDTO = converter.toDTO(user);
         var jwtToken = jwtService.generateToken(user);
         userDTO.setToken(jwtToken);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
         return userDTO;
+    }
+
+    @Override
+    public UserDTO updateUserByRole(UUID uuid, String authorize) {
+        User user = userRepo.findById(uuid).orElseThrow(() -> new UsernameNotFoundException("User not found!.."));
+        Role role = roleRepo.findRoleByCode(authorize).orElseThrow(() -> new ApiRequestException("Authorize not found!.."));
+        user.getRoles().forEach(ro -> {
+            if (ro.getCode().equals(role.getCode()))
+                throw new ApiRequestException("Authorize is exists!..");
+        });
+        user.getRoles().add(role);
+        return converter.toDTO(userRepo.save(user));
+    }
+
+    @Override
+    public UserDTO deleteUserByRole(UUID uuid, String authorize) {
+        User user = userRepo.findById(uuid).orElseThrow(() -> new UsernameNotFoundException("User not found!.."));
+        Role role = roleRepo.findRoleByCode(authorize).orElseThrow(() -> new ApiRequestException("Authorize not found!.."));
+        List<Role> roles = new ArrayList<>();
+        user.getRoles().stream()
+                .filter(ro -> !ro.getCode().equals(role.getCode()))
+                .forEach(roles::add);
+        user.setRoles(roles);
+        return converter.toDTO(userRepo.save(user));
     }
 
     private void revokeAllUserTokens(User user) {

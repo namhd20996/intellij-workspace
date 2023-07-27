@@ -4,6 +4,7 @@ import com.example.assign.dto.UserDTO;
 import com.example.assign.entity.User;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface UserService {
 
@@ -14,4 +15,7 @@ public interface UserService {
     UserDTO register(UserDTO dto);
 
     UserDTO authenticate(UserDTO dto);
+
+    UserDTO updateUserByRole(UUID uuid, String authorize);
+    UserDTO deleteUserByRole(UUID uuid, String authorize);
 }

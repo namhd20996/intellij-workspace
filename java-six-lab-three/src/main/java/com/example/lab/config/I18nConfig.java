@@ -10,6 +10,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
+import java.time.Duration;
+
 @Configuration
 public class I18nConfig implements WebMvcConfigurer {
 
@@ -27,7 +29,7 @@ public class I18nConfig implements WebMvcConfigurer {
 //        cookieLocaleResolver.setDefaultLocale(new Locale("vi"));
         cookieLocaleResolver.setCookieDomain("myAppLocaleCookie");
         cookieLocaleResolver.setCookiePath("/");
-        cookieLocaleResolver.setCookieMaxAge(60 * 60);
+        cookieLocaleResolver.setCookieMaxAge(Duration.ofMinutes(60));
         return cookieLocaleResolver;
     }
 

@@ -1,6 +1,5 @@
 package com.example.assign.converter;
 
-import com.example.assign.api.output.ProductResp;
 import com.example.assign.dto.ProductDTO;
 import com.example.assign.entity.Product;
 import lombok.RequiredArgsConstructor;
@@ -28,27 +27,10 @@ public class ProductConverter {
                 .orElse(null);
     }
 
-    public List<Product> toListEntity(List<ProductDTO> dtoList) {
-        return Optional.of(dtoList)
-                .map(products -> List.of(mapper.map(products, Product[].class)))
-                .orElse(null);
-    }
-
     public List<ProductDTO> toListDTO(List<Product> entities) {
         return Optional.of(entities)
                 .map(products -> List.of(mapper.map(products, ProductDTO[].class)))
                 .orElse(null);
     }
 
-    public List<ProductResp> productOutPutList(List<ProductDTO> dtoList) {
-        return Optional.of(dtoList)
-                .map(products -> List.of(mapper.map(products, ProductResp[].class)))
-                .orElse(null);
-    }
-
-    public ProductResp productOutPut(ProductDTO dto) {
-        return Optional.ofNullable(dto)
-                .map(product -> mapper.map(product, ProductResp.class))
-                .orElse(null);
-    }
 }

@@ -7,9 +7,10 @@ import com.example.assign.dto.CategoryDTO;
 import com.example.assign.dto.ProductDTO;
 import com.example.assign.entity.Gallery;
 import com.example.assign.entity.Product;
+import com.example.assign.exception.ApiRequestException;
+import com.example.assign.repo.GalleryRepo;
 import com.example.assign.repo.ProductRepo;
 import com.example.assign.service.CategoryService;
-import com.example.assign.service.GalleryService;
 import com.example.assign.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,21 +32,16 @@ public class ProductServiceImpl implements ProductService {
 
     private final CategoryService categoryService;
 
-    private final GalleryService galleryService;
+    private final GalleryRepo galleryRepo;
 
     @Override
     public ProductDTO addProduct(ProductDTO dto) {
         CategoryDTO category = categoryService.findCategoryByIdAndStatus(dto.getCategory_key(), SystemConstant.STATUS_CATEGORY);
         dto.setCategory(category);
         List<Gallery> galleries = galleryConverter.toListEntity(dto.getGalleries());
-
-        Product product = productConverter.toEntity(dto);
-        Product productSave = productRepo.save(product);
-
+        Product productSave = productRepo.save(productConverter.toEntity(dto));
         galleries.forEach(gallery -> gallery.setProduct(productSave));
-
-        galleryService.addAllGallery(galleryConverter.toListDTO(galleries));
-
+        productSave.setGalleries(galleryRepo.saveAll(galleries));
         return productConverter.toDTO(productSave);
     }
 
@@ -56,12 +52,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO findOneProductById(UUID id) {
-        return productConverter.toDTO(productRepo.findById(id).get());
+        Product product = productRepo.findById(id)
+                .orElseThrow(() -> new ApiRequestException("Product id: " + id + "not found!.."));
+        return productConverter.toDTO(product);
     }
 
     @Override
     public List<ProductDTO> findAllByCategoryId(UUID id) {
-        return productConverter.toListDTO(productRepo.findAllByCategoryId(id));
+        List<Product> products = productRepo.findAllByCategoryId(id)
+                .orElseThrow(() -> new ApiRequestException("Category id: " + id + "not found!.."));
+        return productConverter.toListDTO(products);
     }
 
     @Override

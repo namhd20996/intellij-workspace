@@ -27,10 +27,6 @@ public class RoleConverter {
                 .orElse(null);
     }
 
-    public Optional<List<Role>> toListEntity(List<RoleDTO> dtos) {
-        return Optional.ofNullable(dtos)
-                .map(roles -> List.of(mapper.map(roles, Role[].class)));
-    }
 
     public Optional<List<RoleDTO>> toListDTO(List<Role> entities) {
         return Optional.ofNullable(entities)

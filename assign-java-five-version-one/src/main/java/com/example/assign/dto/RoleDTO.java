@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class RoleDTO extends BaseTwoDTO<RoleDTO> {
+public class RoleDTO extends BaseDTO<RoleDTO> {
 
     private String name;
 

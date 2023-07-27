@@ -1,17 +1,15 @@
 package com.example.assign.service.impl;
 
-import com.example.assign.api.output.OrderResp;
 import com.example.assign.constant.SystemConstant;
 import com.example.assign.converter.OrderConverter;
-import com.example.assign.converter.ProductConverter;
 import com.example.assign.dto.OrderDTO;
-import com.example.assign.entity.Order;
 import com.example.assign.entity.OrderDetails;
 import com.example.assign.entity.User;
+import com.example.assign.exception.ApiRequestException;
 import com.example.assign.repo.OrderRepo;
+import com.example.assign.repo.ProductRepo;
 import com.example.assign.service.OrderDetailsService;
 import com.example.assign.service.OrderService;
-import com.example.assign.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,11 +27,11 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderConverter orderConverter;
 
-    private final ProductService productService;
+
+    private final ProductRepo productRepo;
 
     private final OrderDetailsService orderDetailsService;
 
-    private final ProductConverter productConverter;
 
     @Override
     public List<OrderDTO> findAllByIdAndStatus(UUID id, Integer status) {
@@ -47,18 +45,21 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO findOrderById(UUID id) {
-        return orderConverter.toDTO(orderRepo.findById(id).orElse(null));
+        return orderRepo.findById(id)
+                .map(orderConverter::toDTO)
+                .orElseThrow(() -> new ApiRequestException("Order id: " + id + "not found!.."));
     }
 
     @Override
-    public OrderResp addOrder(OrderDTO dto) {
+    public OrderDTO addOrder(OrderDTO dto) {
         List<OrderDetails> orderDetailsList = dto.getProducts()
                 .stream().parallel()
                 .map(product -> {
-                    var productEntity = productConverter.toEntity(productService.findOneProductById(product.getId()));
+                    var productEntity = productRepo.findById(product.getId())
+                            .orElseThrow(() -> new ApiRequestException("Product: " + product.getId() + "not found!.."));
                     if (productEntity.getQuantity() == 0 || productEntity.getQuantity() - product.getQuantity() < 0)
-                        throw new IllegalStateException(productEntity.getName() + " invalid quantity");
-                    productService.updateQuantityByIdAndStatus(
+                        throw new ApiRequestException(productEntity.getName() + " invalid quantity");
+                    productRepo.updateQuantityByIdAndStatus(
                             productEntity.getQuantity() - product.getQuantity(),
                             productEntity.getId(),
                             SystemConstant.STATUS_PRODUCT
@@ -73,18 +74,17 @@ public class OrderServiceImpl implements OrderService {
         double totalMoney = orderDetailsList.stream()
                 .mapToDouble(product -> product.getPrice() * product.getQuantity())
                 .sum();
-        Order order = orderConverter.toEntity(dto);
+        var order = orderConverter.toEntity(dto);
         order.setOrderDetails(orderDetailsList);
         order.setTotalMoney(totalMoney);
         order.setStatus(SystemConstant.STATUS_ORDER_APPROVE);
         order.setUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        Order finalOrder = orderRepo.save(order);
+        var finalOrder = orderRepo.save(order);
         orderDetailsList.forEach(orderDetails -> orderDetails.setOrder(finalOrder));
 
         orderDetailsService.addAllOrderDetail(orderDetailsList);
-        OrderResp orderResp = orderConverter.orderResp(finalOrder);
-        orderResp.setMessage("Add success");
-        orderResp.setProducts(dto.getProducts());
-        return orderResp;
+        OrderDTO orderDTO = orderConverter.toDTO(finalOrder);
+        orderDTO.setProducts(dto.getProducts());
+        return orderDTO;
     }
 }

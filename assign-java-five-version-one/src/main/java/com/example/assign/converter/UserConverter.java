@@ -28,10 +28,6 @@ public class UserConverter {
                 .orElse(null);
     }
 
-    public List<User> toListEntity(List<UserDTO> dtos) {
-        return Optional.of(List.of(mapper.map(dtos, User[].class))).orElse(null);
-    }
-
     public List<UserDTO> toListDTO(List<User> entities) {
         return Optional.of(List.of(mapper.map(entities, UserDTO[].class))).orElse(null);
     }
@@ -42,9 +38,4 @@ public class UserConverter {
                 .orElse(null);
     }
 
-    public List<AuthenticationResp> authenticationResp(List<UserDTO> dtoList) {
-        return Optional.of(dtoList)
-                .map(users -> List.of(mapper.map(users, AuthenticationResp[].class)))
-                .orElse(null);
-    }
 }

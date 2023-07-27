@@ -1,7 +1,5 @@
 package com.example.assign.api;
 
-import com.example.assign.api.output.CategoryResp;
-import com.example.assign.converter.CategoryConverter;
 import com.example.assign.dto.CategoryDTO;
 import com.example.assign.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +16,6 @@ public class CategoryResource {
 
     private final CategoryService categoryService;
 
-    private final CategoryConverter categoryConverter;
-
     @PostMapping("/add")
     public ResponseEntity<CategoryDTO> addCategory(@RequestBody CategoryDTO dto) {
         if(categoryService.existsByName(dto.getName())){
@@ -30,7 +26,7 @@ public class CategoryResource {
     }
 
     @GetMapping("/get-all")
-    public ResponseEntity<List<CategoryResp>> getAllStatus() {
-        return new ResponseEntity<>(categoryConverter.categoryResp(categoryService.findAllByStatus(1)), HttpStatus.OK);
+    public ResponseEntity<List<CategoryDTO>> getAllStatus() {
+        return new ResponseEntity<>(categoryService.findAllByStatus(1), HttpStatus.OK);
     }
 }

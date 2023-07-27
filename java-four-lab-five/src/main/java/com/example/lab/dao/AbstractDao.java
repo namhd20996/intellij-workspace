@@ -134,7 +134,7 @@ public class AbstractDao<T> {
             result = query.executeUpdate();
             SESSION.getTransaction().commit();
             System.out.println("Update success");
-            return result > 0 ? true : false;
+            return result > 0;
         } catch (Exception e) {
             SESSION.getTransaction().rollback();
             throw new RuntimeException(e);
@@ -157,13 +157,13 @@ public class AbstractDao<T> {
 
     public List<Object[]> callStored(String namedStored, Map<String, Object> params) {
         StoredProcedureQuery query = SESSION.createNamedStoredProcedureQuery(namedStored);
-        params.forEach((key, value) -> query.setParameter(key, value));
+        params.forEach(query::setParameter);
         return query.getResultList();
     }
 
     public List<T> findNamedQuery(Class<T> clazz, String namedQuery, Map<String, Object> params, boolean isKeyword) {
         Query<T> query = SESSION.createNamedQuery(namedQuery, clazz);
-        params.forEach((key, value) -> query.setParameter(key, value));
+        params.forEach(query::setParameter);
         if (isKeyword) {
             params.forEach((key, value) -> query.setParameter(key, "%" + value + "%"));
         }

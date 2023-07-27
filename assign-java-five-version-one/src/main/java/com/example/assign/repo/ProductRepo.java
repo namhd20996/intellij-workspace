@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ProductRepo extends JpaRepository<Product, UUID> {
@@ -13,7 +14,7 @@ public interface ProductRepo extends JpaRepository<Product, UUID> {
     @Query(""" 
             SELECT o FROM Product o WHERE o.category.id = ?1
             """)
-    List<Product> findAllByCategoryId(UUID id);
+    Optional<List<Product>> findAllByCategoryId(UUID id);
 
     @Modifying(clearAutomatically = true)
     @Query("""
