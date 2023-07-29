@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -24,12 +23,6 @@ public class ProductConverter {
     public ProductDTO toDTO(Product entity) {
         return Optional.ofNullable(entity)
                 .map(product -> mapper.map(product, ProductDTO.class))
-                .orElse(null);
-    }
-
-    public List<ProductDTO> toListDTO(List<Product> entities) {
-        return Optional.of(entities)
-                .map(products -> List.of(mapper.map(products, ProductDTO[].class)))
                 .orElse(null);
     }
 

@@ -35,12 +35,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDTO> findAllByIdAndStatus(UUID id, Integer status) {
-        return orderConverter.toListDTO(orderRepo.findAllByIdAndStatus(id, status));
+        return orderRepo.findAllByIdAndStatus(id, status)
+                .stream()
+                .map(orderConverter::toDTO)
+                .toList();
     }
 
     @Override
     public List<OrderDTO> findAll() {
-        return orderConverter.toListDTO(orderRepo.findAll());
+        return orderRepo.findAll()
+                .stream()
+                .map(orderConverter::toDTO)
+                .toList();
     }
 
     @Override

@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -25,10 +24,6 @@ public class CategoryConverter {
         return Optional.ofNullable(entity)
                 .map(category -> mapper.map(category, CategoryDTO.class))
                 .orElse(null);
-    }
-
-    public List<CategoryDTO> toListDTO(List<Category> entities) {
-        return Optional.of(entities).map(categories -> List.of(mapper.map(categories, CategoryDTO[].class))).orElse(null);
     }
 
 }

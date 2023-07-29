@@ -26,6 +26,12 @@ public class GalleryServiceImpl implements GalleryService {
 
     @Override
     public List<GalleryDTO> addAllGallery(List<GalleryDTO> dtoList) {
-        return converter.toListDTO(galleryRepo.saveAll(converter.toListEntity(dtoList)));
+        List<Gallery> galleries = dtoList.stream()
+                .map(converter::toEntity)
+                .toList();
+        List<Gallery> entities = galleryRepo.saveAll(galleries);
+        return entities.stream()
+                .map(converter::toDTO)
+                .toList();
     }
 }

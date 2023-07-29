@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -27,9 +26,4 @@ public class RoleConverter {
                 .orElse(null);
     }
 
-
-    public Optional<List<RoleDTO>> toListDTO(List<Role> entities) {
-        return Optional.ofNullable(entities)
-                .map(roles -> List.of(mapper.map(roles, RoleDTO[].class)));
-    }
 }

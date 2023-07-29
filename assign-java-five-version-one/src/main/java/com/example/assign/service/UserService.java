@@ -16,6 +16,9 @@ public interface UserService {
 
     UserDTO authenticate(UserDTO dto);
 
+    String confirmToken(String token);
+
     UserDTO updateUserByRole(UUID uuid, String authorize);
+
     UserDTO deleteUserByRole(UUID uuid, String authorize);
 }

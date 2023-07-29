@@ -2,7 +2,7 @@ package com.example.email.service.impl;
 
 import com.example.email.model.MailModel;
 import com.example.email.service.IMailService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,12 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MailServiceImpl implements IMailService {
 
-    @Autowired
-    private JavaMailSender sender;
+    private final JavaMailSender sender;
 
-    private List<MimeMessage> queue = new ArrayList<>();
+    private final List<MimeMessage> queue = new ArrayList<>();
 
     @Override
     public void push(String to, String subject, String body) {

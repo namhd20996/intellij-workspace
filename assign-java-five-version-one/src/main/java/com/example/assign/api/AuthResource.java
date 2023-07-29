@@ -3,7 +3,6 @@ package com.example.assign.api;
 import com.example.assign.api.output.AuthenticationResp;
 import com.example.assign.converter.UserConverter;
 import com.example.assign.dto.UserDTO;
-import com.example.assign.exception.ApiRequestException;
 import com.example.assign.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,15 +32,17 @@ public class AuthResource {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResp> register(@RequestBody UserDTO dto) {
-        if (userService.existsUserByUsername(dto.getUsername())) {
-            throw new ApiRequestException("User is taken!..");
-        }
         return new ResponseEntity<>(userConverter.authenticationResp(userService.register(dto)), HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
     public ResponseEntity<UserDTO> update(@RequestBody UserDTO dto) {
         return new ResponseEntity<>(userService.register(dto), HttpStatus.OK);
+    }
+
+    @GetMapping("/confirm")
+    public ResponseEntity<?> enabledAuth(@RequestParam("token") String token) {
+        return new ResponseEntity<>(userService.confirmToken(token), HttpStatus.OK);
     }
 
     @PutMapping("/update/role/{id}/{authorize}")

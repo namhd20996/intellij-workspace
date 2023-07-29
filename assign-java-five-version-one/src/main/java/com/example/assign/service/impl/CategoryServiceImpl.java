@@ -31,25 +31,32 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDTO> findAllCategory() {
-        return converter.toListDTO(categoryRepo.findAll());
+        return categoryRepo.findAll()
+                .stream()
+                .map(converter::toDTO)
+                .toList();
     }
 
     @Override
     public CategoryDTO findOneById(UUID id) {
-        Category category = categoryRepo.findById(id)
+        return categoryRepo.findById(id)
+                .map(converter::toDTO)
                 .orElseThrow(() -> new ApiRequestException("Category id: " + id + "not found!.."));
-        return converter.toDTO(category);
     }
 
     @Override
     public CategoryDTO findCategoryByIdAndStatus(UUID id, Integer status) {
-        Category category = categoryRepo.findCategoryByIdAndStatus(id, status).orElseThrow(() -> new ApiRequestException("Category id: " + id + " not found!.."));
-        return converter.toDTO(category);
+        return categoryRepo.findCategoryByIdAndStatus(id, status)
+                .map(converter::toDTO)
+                .orElseThrow(() -> new ApiRequestException("Category id: " + id + " not found!.."));
     }
 
     @Override
     public List<CategoryDTO> findAllByStatus(Integer status) {
-        return converter.toListDTO(categoryRepo.findAllByStatus(status));
+        return categoryRepo.findAllByStatus(status)
+                .stream()
+                .map(converter::toDTO)
+                .toList();
     }
 
     @Override

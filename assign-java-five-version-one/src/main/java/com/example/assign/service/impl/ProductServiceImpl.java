@@ -38,16 +38,23 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO addProduct(ProductDTO dto) {
         CategoryDTO category = categoryService.findCategoryByIdAndStatus(dto.getCategory_key(), SystemConstant.STATUS_CATEGORY);
         dto.setCategory(category);
-        List<Gallery> galleries = galleryConverter.toListEntity(dto.getGalleries());
+        List<Gallery> galleries = dto.getGalleries()
+                .stream()
+                .map(galleryConverter::toEntity)
+                .toList();
         Product productSave = productRepo.save(productConverter.toEntity(dto));
         galleries.forEach(gallery -> gallery.setProduct(productSave));
-        productSave.setGalleries(galleryRepo.saveAll(galleries));
+        List<Gallery> galleriesSave = galleryRepo.saveAll(galleries);
+        productSave.setGalleries(galleriesSave);
         return productConverter.toDTO(productSave);
     }
 
     @Override
     public List<ProductDTO> findAllProduct() {
-        return productConverter.toListDTO(productRepo.findAll());
+        return productRepo.findAll()
+                .stream()
+                .map(productConverter::toDTO)
+                .toList();
     }
 
     @Override
@@ -61,7 +68,9 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> findAllByCategoryId(UUID id) {
         List<Product> products = productRepo.findAllByCategoryId(id)
                 .orElseThrow(() -> new ApiRequestException("Category id: " + id + "not found!.."));
-        return productConverter.toListDTO(products);
+        return products.stream()
+                .map(productConverter::toDTO)
+                .toList();
     }
 
     @Override

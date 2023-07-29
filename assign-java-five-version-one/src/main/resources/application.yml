@@ -9,9 +9,20 @@ spring:
     database: sql_server
     properties:
       hibernate:
-#        use_nationalized_character_data: true
+        # use_nationalized_character_data: true
         enable_lazy_load_no_trans: true
         format_sql: true
     hibernate:
       ddl-auto: create-drop
     database-platform: org.hibernate.dialect.SQLServer2012Dialect
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: hoangduynam20996@gmail.com
+    password: fuaycypcqvrdsjyy
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

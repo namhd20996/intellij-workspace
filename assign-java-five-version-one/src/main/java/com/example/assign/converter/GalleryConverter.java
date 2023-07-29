@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -27,11 +26,4 @@ public class GalleryConverter {
                 .orElse(null);
     }
 
-    public List<Gallery> toListEntity(List<GalleryDTO> dtoList) {
-        return Optional.of(dtoList).map(galleries -> List.of(mapper.map(galleries, Gallery[].class))).orElse(null);
-    }
-
-    public List<GalleryDTO> toListDTO(List<Gallery> dtoList) {
-        return Optional.of(dtoList).map(galleries -> List.of(mapper.map(galleries, GalleryDTO[].class))).orElse(null);
-    }
 }

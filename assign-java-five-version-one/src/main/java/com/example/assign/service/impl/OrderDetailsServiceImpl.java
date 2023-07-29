@@ -1,7 +1,6 @@
 package com.example.assign.service.impl;
 
 import com.example.assign.converter.OrderDetailsConverter;
-import com.example.assign.converter.ProductConverter;
 import com.example.assign.dto.OrderDetailsDTO;
 import com.example.assign.entity.OrderDetails;
 import com.example.assign.repo.OrderDetailsRepo;
@@ -35,6 +34,9 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 
     @Override
     public List<OrderDetailsDTO> findProductsByEmail(String email) {
-        return orderDetailsConverter.toListDTO(orderDetailsRepo.findProductsByEmail(email));
+        return orderDetailsRepo.findProductsByEmail(email)
+                .stream()
+                .map(orderDetailsConverter::toDTO)
+                .toList();
     }
 }

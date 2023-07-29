@@ -23,7 +23,14 @@ public class MailModel {
         this.body = body;
     }
 
-    public MailModel(String from, String to, String subject, String body, List<String> cc, List<String> bcc, List<File> files) {
+    public MailModel(String from,
+                     String to,
+                     String subject,
+                     String body,
+                     List<String> cc,
+                     List<String> bcc,
+                     List<File> files
+    ) {
         this.from = from;
         this.to = to;
         this.subject = subject;

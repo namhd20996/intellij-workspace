@@ -44,6 +44,7 @@ public class User extends BaseEntity implements UserDetails {
     @Column
     private String avatar;
     @Column
+    @Temporal(TemporalType.DATE)
     private Date dob;
     @Column
     private String verify;
@@ -59,9 +60,9 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getCode())));
-        return authorities;
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getCode()))
+                .toList();
     }
 
     @Override
