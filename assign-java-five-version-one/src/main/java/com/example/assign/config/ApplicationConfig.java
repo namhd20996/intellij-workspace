@@ -1,7 +1,7 @@
 package com.example.assign.config;
 
 import com.example.assign.constant.SystemConstant;
-import com.example.assign.repo.UserRepo;
+import com.example.assign.user.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;

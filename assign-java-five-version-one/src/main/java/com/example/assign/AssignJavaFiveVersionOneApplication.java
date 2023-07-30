@@ -1,7 +1,7 @@
 package com.example.assign;
 
-import com.example.assign.entity.Role;
-import com.example.assign.repo.RoleRepo;
+import com.example.assign.role.Role;
+import com.example.assign.role.RoleRepo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
