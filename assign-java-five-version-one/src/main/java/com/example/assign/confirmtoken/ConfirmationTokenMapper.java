@@ -18,7 +18,4 @@ public class ConfirmationTokenMapper implements
         return mapper.map(confirmationToken, ConfirmationTokenDTO.class);
     }
 
-    public ConfirmationToken apply(ConfirmationTokenDTO confirmationToken) {
-        return mapper.map(confirmationToken, ConfirmationToken.class);
-    }
 }

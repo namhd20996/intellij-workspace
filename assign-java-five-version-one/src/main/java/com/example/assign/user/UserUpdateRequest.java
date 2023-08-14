@@ -27,15 +27,21 @@ public class UserUpdateRequest {
             regexp = "^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]+?\\.[a-zA-Z]{2,3}$"
     )
     private String email;
-    @Pattern(
-            message = "regex date",
-            regexp = "yyyy-MM-dd"
-    )
+    //    @Pattern(
+//            message = "regex date",
+//            regexp = "yyyy-MM-dd"
+//    )
     private Date dob;
     @Pattern(
             message = "regex phone not valid",
             regexp = "^(0?)(3[2-9]|5[6|8]|7[0|6-9]|8[0-6|]|9[0-4|6-9])[0-9]{7}$"
     )
     private String phone;
+
+    private String address;
+
+    private String avatar;
+
+    private Integer status;
 
 }

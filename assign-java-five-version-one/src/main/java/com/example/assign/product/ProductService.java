@@ -11,6 +11,8 @@ public interface ProductService {
 
     List<ProductDTO> findAllProduct();
 
+    ProductResponse findAllProduct(Integer page, Integer limit);
+
     ProductDTO findOneProductById(UUID id);
 
     ProductDTO findProductByIdAndStatus(UUID uuid, Integer status);
@@ -18,4 +20,12 @@ public interface ProductService {
     List<ProductDTO> findAllByCategoryId(UUID id);
 
     void updateQuantityByIdAndStatus(Integer quantity, UUID id, Integer status);
+
+    List<ProductDTO> findProductsByStatus(Integer status);
+
+    void deleteProduct(UUID uuid);
+
+    List<ProductStatisticalRevenue> findAllRevenueByCategory();
+
+    Integer count();
 }

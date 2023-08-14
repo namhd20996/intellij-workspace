@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -22,6 +23,15 @@ public class ProductDTOMapper {
         return Optional.ofNullable(entity)
                 .map(product -> mapper.map(product, ProductDTO.class))
                 .orElse(null);
+    }
+
+    public List<ProductStatisticalRevenue> toStatisticalRevenue(List<Object[]> requests) {
+        return requests.stream()
+                .map(o -> ProductStatisticalRevenue.builder()
+                        .name(String.valueOf(o[0]))
+                        .totalMoney(Double.valueOf(o[1] + ""))
+                        .build())
+                .toList();
     }
 
 }

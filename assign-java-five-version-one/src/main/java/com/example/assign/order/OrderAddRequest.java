@@ -17,7 +17,7 @@ public class OrderAddRequest {
     @NotBlank
     @Pattern(
             message = "regex username not valid",
-            regexp = "^[a-zA-Z\\d]+$"
+            regexp = "^[a-zA-Z\\s]+$"
     )
     private String fullName;
     @Pattern(
@@ -28,7 +28,7 @@ public class OrderAddRequest {
     @NotBlank
     @Pattern(
             message = "regex address not valid",
-            regexp = "^[a-zA-Z\\d]+$"
+            regexp = "^[a-zA-Z\\s]+$"
     )
     private String address;
     @NotBlank(message = "Email not blank")

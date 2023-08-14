@@ -5,11 +5,14 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface UserRepo extends JpaRepository<com.example.assign.user.User, UUID> {
-    Optional<com.example.assign.user.User> findUserByUsernameAndStatus(String username, Integer status);
+public interface UserRepo extends JpaRepository<User, UUID> {
+    Optional<User> findUserByUsernameAndStatus(String username, Integer status);
+
+    Optional<User> findUserByStatusAndEmail(Integer status, String email);
 
     boolean existsUserByUsername(String username);
 
@@ -23,5 +26,7 @@ public interface UserRepo extends JpaRepository<com.example.assign.user.User, UU
             WHERE u.email =?1
             """)
     void updateUserByEmail(String email);
+
+    List<User> findUsersByStatus(Integer status);
 
 }

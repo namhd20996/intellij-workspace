@@ -6,7 +6,8 @@ import com.example.assign.confirmtoken.ConfirmationTokenService;
 import com.example.assign.constant.SystemConstant;
 import com.example.assign.emai.EmailService;
 import com.example.assign.exception.ApiRequestException;
-import com.example.assign.exception.DuplicateResourceException;
+import com.example.assign.exception.ResourceDuplicateException;
+import com.example.assign.exception.ResourceNotFoundException;
 import com.example.assign.jwt.JwtService;
 import com.example.assign.role.Role;
 import com.example.assign.role.RoleRepo;
@@ -16,6 +17,7 @@ import com.example.assign.token.TokenType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -58,18 +61,18 @@ public class UserServiceImpl implements UserService {
     public void register(UserRegistrationRequest request) {
         boolean isValidUser = existsUserByUsername(request.getUsername());
         if (isValidUser) {
-            throw new DuplicateResourceException("User is exists!..");
+            throw new ResourceDuplicateException("User is exists!..");
         }
         boolean isValidEmail = existsByEmail(request.getEmail());
         if (isValidEmail) {
-            throw new DuplicateResourceException("email is exists!..");
+            throw new ResourceDuplicateException("email is exists!..");
         }
         // List<Role> roles = roleRepo.findRoleByCode("admin:create").stream().toList();
         List<Role> roles = roleRepo.findRolesByName("ADMIN")
-                .orElseThrow(() -> new ApiRequestException("Role with name not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Role with name not found"));
         User user = User.builder()
                 .username(request.getUsername())
-                .status(1)
+                .status(SystemConstant.STATUS_AUTH_NO_ACTIVE)
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .roles(roles)
@@ -85,7 +88,7 @@ public class UserServiceImpl implements UserService {
                 )
         );
         String link = "http://localhost:8080/api/auth/confirm?token=" + jwtToken;
-        emailService.send(userSave.getEmail(), buildEmail(userSave.getUsername(), link));
+        emailService.send(userSave.getEmail(), buildEmail(userSave.getUsername(), link, "", false));
         saveUserToken(userSave, jwtToken);
     }
 
@@ -93,14 +96,26 @@ public class UserServiceImpl implements UserService {
     public void updateUser(UserUpdateRequest request) {
         User user = userRepo.findUserByUsernameAndStatus(request.getUsername(), SystemConstant.STATUS_AUTH)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found!..."));
+        System.out.println(request.getDob());
         boolean isValidEmail = existsByEmail(request.getEmail());
-
         if (isValidEmail) {
-            throw new ApiRequestException("Email: " + request.getEmail() + " is already.");
+            throw new ApiRequestException("email: " + request.getEmail() + " is already.");
         }
 
         if (!user.getEmail().equals(request.getEmail())) {
             user.setEmail(request.getEmail());
+        }
+
+        if (user.getAddress() == null || !user.getAddress().equals(request.getAddress())) {
+            user.setAddress(request.getAddress());
+        }
+
+        if (user.getStatus() == null || !user.getStatus().equals(request.getStatus())) {
+            user.setStatus(request.getStatus());
+        }
+
+        if (user.getAvatar() == null || !user.getAvatar().equals(request.getAvatar())) {
+            user.setAvatar(request.getAvatar());
         }
 
         if (user.getFirstname() == null || !user.getFirstname().equals(request.getFirstname())) {
@@ -154,6 +169,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void findUserByStatusAndEmail(String email) {
+        User user = userRepo.findUserByStatusAndEmail(SystemConstant.STATUS_AUTH, email)
+                .orElseThrow(() -> new ResourceNotFoundException("User by with email: " + email + " not found!.."));
+        String password = randomPassword();
+        emailService.send(user.getEmail(), buildEmail("", "", password, true));
+        user.setPassword(passwordEncoder.encode(password));
+        userRepo.save(user);
+    }
+
+    @Override
+    public void changePassword(String passwordOld, String passwordNew) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        boolean isValidPassword = passwordEncoder.matches(passwordOld, user.getPassword());
+        if (!isValidPassword) {
+            throw new ApiRequestException("password invalid");
+        }
+        user.setPassword(passwordEncoder.encode(passwordNew));
+        userRepo.save(user);
+        revokeAllUserTokens(user);
+    }
+
+    private String randomPassword() {
+        Random rd = new Random();
+        return String.valueOf(rd.nextInt(10)) +
+                rd.nextInt(10) +
+                rd.nextInt(10) +
+                rd.nextInt(10) +
+                rd.nextInt(10) +
+                rd.nextInt(10) +
+                "@bBbb";
+    }
+
+    @Override
     public void removeRoleUserByCode(UUID uuid, String authorize) {
         User user = userRepo.findById(uuid).orElseThrow(() -> new UsernameNotFoundException("User not found!.."));
         Role role = roleRepo.findRoleByCode(authorize).orElseThrow(() -> new ApiRequestException("Authorize not found!.."));
@@ -166,16 +214,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserDTO> findUsersByStatus(Integer status) {
+        return userRepo.findUsersByStatus(status)
+                .stream()
+                .map(converter::toDTO)
+                .toList();
+    }
+
+    @Override
+    public void deleteUser(UUID uuid) {
+        User user = userRepo.findById(uuid)
+                .orElseThrow(() -> new ResourceNotFoundException("user find by id: " + uuid + " not found!.."));
+        user.setStatus(SystemConstant.STATUS_AUTH_NO_ACTIVE);
+        userRepo.save(user);
+    }
+
+    @Override
     public String confirmToken(String token) {
         ConfirmationTokenDTO confirmationToken = confirmationTokenService.findByToken(token);
         if (confirmationToken.getConfirmedAt() != null) {
-            throw new ApiRequestException("User already confirm!..");
+            throw new ApiRequestException("user already confirm!..");
         }
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
         if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException("Token expired");
+            throw new IllegalStateException("token expired");
         }
-        confirmationTokenService.setConfirmeAt(token);
+        confirmationTokenService.setConfirmAt(token);
         userRepo.updateUserByEmail(confirmationToken.getUser().getEmail());
         return "Confirm success!..";
     }
@@ -207,7 +271,13 @@ public class UserServiceImpl implements UserService {
         tokenRepo.save(token);
     }
 
-    private String buildEmail(String name, String link) {
+    private String buildEmail(String name, String link, String password, boolean isValidEmail) {
+        String send = "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please click on the below link to activate your account: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Activate Now</a> </p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p>";
+        String title = "                      <span style=\"font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#ffffff;text-decoration:none;vertical-align:top;display:inline-block\">Confirm your email</span>\n";
+        if (isValidEmail) {
+            send = "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Password: " + password + "</p>";
+            title = "                      <span style=\"font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#ffffff;text-decoration:none;vertical-align:top;display:inline-block\">Confirm your password</span>\n";
+        }
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +
                 "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" +
@@ -225,7 +295,7 @@ public class UserServiceImpl implements UserService {
                 "                  \n" +
                 "                    </td>\n" +
                 "                    <td style=\"font-size:28px;line-height:1.315789474;Margin-top:4px;padding-left:10px\">\n" +
-                "                      <span style=\"font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#ffffff;text-decoration:none;vertical-align:top;display:inline-block\">Confirm your email</span>\n" +
+                title +
                 "                    </td>\n" +
                 "                  </tr>\n" +
                 "                </tbody></table>\n" +
@@ -263,7 +333,7 @@ public class UserServiceImpl implements UserService {
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
                 "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
                 "        \n" +
-                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please click on the below link to activate your account: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Activate Now</a> </p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p>" +
+                send +
                 "        \n" +
                 "      </td>\n" +
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +

@@ -1,7 +1,6 @@
 package com.example.service;
 
 import com.example.dto.BookDTO;
-import com.example.entity.Book;
 
 import java.util.List;
 

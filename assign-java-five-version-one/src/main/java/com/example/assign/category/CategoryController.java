@@ -16,10 +16,6 @@ public class CategoryController {
 
     @PostMapping("/add")
     public ResponseEntity<CategoryDTO> addCategory(@RequestBody CategoryDTO dto) {
-        if(categoryService.existsByName(dto.getName())){
-            dto.setMessage("Category name is taken!..");
-            return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
-        }
         return new ResponseEntity<>(categoryService.addCategory(dto), HttpStatus.CREATED);
     }
 

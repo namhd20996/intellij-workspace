@@ -25,6 +25,18 @@ public class ProductController {
         return new ResponseEntity<>(productService.findAllProduct(), HttpStatus.OK);
     }
 
+    @GetMapping("/all/manager/{page}/{limit}")
+    public ResponseEntity<ProductResponse> getProducts(@PathVariable("page") Integer page,
+                                                       @PathVariable("limit") Integer limit)
+    {
+        return new ResponseEntity<>(productService.findAllProduct(page, limit), HttpStatus.OK);
+    }
+
+    @GetMapping("/all/{status}")
+    public ResponseEntity<List<ProductDTO>> getProductsByStatus(@PathVariable("status") Integer status) {
+        return new ResponseEntity<>(productService.findProductsByStatus(status), HttpStatus.OK);
+    }
+
     @GetMapping("/all/category")
     public ResponseEntity<List<ProductDTO>> getAllByCategory(@RequestParam("id") UUID id) {
         return new ResponseEntity<>(productService.findAllByCategoryId(id), HttpStatus.OK);
@@ -43,7 +55,7 @@ public class ProductController {
     ) {
         validationHandle.handleValidate(errors);
         productService.addProduct(uuid, request);
-        return new ResponseEntity<>("add success...", HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
@@ -51,9 +63,15 @@ public class ProductController {
         return "PUT:: product controller";
     }
 
-    @DeleteMapping("/delete")
-    public String delete() {
-        return "DELETE:: product controller";
+    @DeleteMapping("/delete/{uuid}")
+    public ResponseEntity<?> delete(@PathVariable("uuid") UUID uuid) {
+        productService.deleteProduct(uuid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/statistic/category")
+    public ResponseEntity<List<ProductStatisticalRevenue>> statisticByCategory() {
+        return new ResponseEntity<>(productService.findAllRevenueByCategory(), HttpStatus.OK);
     }
 
 }

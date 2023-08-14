@@ -5,7 +5,11 @@ import com.example.assign.product.ProductDTO;
 import com.example.assign.user.UserDTO;
 import com.example.assign.util.BaseDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,8 +19,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class OrderDTO extends BaseDTO<OrderDTO> {
+@SuperBuilder(toBuilder = true)
+public class OrderDTO extends BaseDTO {
 
     private Date orderDate;
     private String fullName;

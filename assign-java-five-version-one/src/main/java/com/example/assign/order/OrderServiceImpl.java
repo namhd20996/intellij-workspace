@@ -2,6 +2,7 @@ package com.example.assign.order;
 
 import com.example.assign.constant.SystemConstant;
 import com.example.assign.exception.ApiRequestException;
+import com.example.assign.exception.ResourceNotFoundException;
 import com.example.assign.orderdetails.OrderDetails;
 import com.example.assign.orderdetails.OrderDetailsService;
 import com.example.assign.product.ProductDTO;
@@ -13,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,6 +58,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<OrderStatisticRevenue> getRevenueByMonth() {
+        List<Object[]> revenue = orderRepo.getRevenueByMonth();
+        return orderDTOMapper.orderStatisticRevenues(revenue);
+    }
+
+    @Override
     public void addOrder(OrderAddRequest request) {
         List<ProductDTO> productDTOS = request.getProducts()
                 .stream()
@@ -75,18 +83,18 @@ public class OrderServiceImpl implements OrderService {
                     );
                     return OrderDetails.builder()
                             .product(productDTOMapper.toEntity(product))
-                            .price(product.getPrice())
-                            .quantity(product.getQuantity())
-                            .totalMoney(product.getPrice() * product.getQuantity())
+                            .price(p.getPrice())
+                            .quantity(p.getQuantity())
+                            .totalMoney(p.getPrice() * p.getQuantity())
                             .build();
                 }).toList();
-
 
         double totalMoney = orderDetails.stream()
                 .mapToDouble(p -> p.getPrice() * p.getQuantity())
                 .sum();
 
         var order = Order.builder()
+                .orderDate(new Date(System.currentTimeMillis()))
                 .fullName(request.getFullName())
                 .phoneNumber(request.getPhoneNumber())
                 .address(request.getAddress())
@@ -99,6 +107,22 @@ public class OrderServiceImpl implements OrderService {
         var finalOrder = orderRepo.save(order);
         orderDetails.forEach(orderDetail -> orderDetail.setOrder(finalOrder));
         orderDetailsService.addAllOrderDetail(orderDetails);
+    }
+
+    @Override
+    public void deleteOrder(UUID uuid) {
+        Order order = orderRepo.findById(uuid)
+                .orElseThrow(() -> new ResourceNotFoundException("order find by id: " + uuid + " not found!.."));
+        order.setStatus(SystemConstant.STATUS_ORDER_PENDING);
+        orderRepo.save(order);
+    }
+
+    @Override
+    public List<OrderDTO> findOrdersByStatus(Integer status) {
+        return orderRepo.findOrdersByStatus(status)
+                .stream()
+                .map(orderDTOMapper::toDTO)
+                .toList();
     }
 
     private ProductDTO getProductDTO(ProductDTO p) {

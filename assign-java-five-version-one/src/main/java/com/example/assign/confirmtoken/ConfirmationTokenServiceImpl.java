@@ -12,17 +12,17 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
 
     private final ConfirmationTokenRepo confirmationTokenRepo;
 
-    private final ConfirmationTokenMapper confirmationTokenConverter;
+    private final ConfirmationTokenMapper confirmationTokenMapper;
 
     @Override
     public ConfirmationTokenDTO findByToken(String token) {
-        ConfirmationToken confirmationToken = confirmationTokenRepo.findByToken(token)
+        return confirmationTokenRepo.findByToken(token)
+                .map(confirmationTokenMapper)
                 .orElseThrow(() -> new ApiRequestException("Token not found!.."));
-        return confirmationTokenConverter.apply(confirmationToken);
     }
 
     @Override
-    public void setConfirmeAt(String token) {
+    public void setConfirmAt(String token) {
         confirmationTokenRepo.updateConfirmAt(token, LocalDateTime.now());
     }
 

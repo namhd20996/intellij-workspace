@@ -4,6 +4,7 @@ import com.example.assign.product.ProductDTO;
 import com.example.assign.util.BaseDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +13,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class CategoryDTO extends BaseDTO<CategoryDTO> {
+@SuperBuilder(toBuilder = true)
+public class CategoryDTO extends BaseDTO {
 
     private String name;
     private String description;

@@ -13,4 +13,10 @@ public interface OrderService {
     OrderDTO findOrderById(UUID id);
 
     void addOrder(OrderAddRequest request);
+
+    void deleteOrder(UUID uuid);
+
+    List<OrderDTO> findOrdersByStatus(Integer status);
+
+    List<OrderStatisticRevenue> getRevenueByMonth();
 }

@@ -4,10 +4,12 @@ import com.example.assign.validation.ValidationHandle;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -34,7 +36,7 @@ public class AuthController {
     public ResponseEntity<?> register(@Validated @RequestBody UserRegistrationRequest request, Errors errors) {
         validationHandle.handleValidate(errors);
         userService.register(request);
-        return new ResponseEntity<>("Check mail active user...", HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
@@ -63,9 +65,30 @@ public class AuthController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete")
-    public String delete() {
-        return "GET:: auth delete";
+    @PostMapping("/forgot-password/{email}")
+    public ResponseEntity<?> forgotPassword(@PathVariable("email") String email) {
+        userService.findUserByStatusAndEmail(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/change-password")
+    public ResponseEntity<?> changePassword(@Validated @RequestBody UserChangePasswordRequest request,
+                                            Errors errors) {
+        validationHandle.handleValidate(errors);
+        userService.changePassword(request.getPasswordOld(), request.getPasswordNew());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/find-all/{status}")
+    @PreAuthorize("hasAuthority('admin:read')")
+    public ResponseEntity<List<UserDTO>> getAllUser(@PathVariable("status") Integer status) {
+        return new ResponseEntity<>(userService.findUsersByStatus(status), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{uuid}")
+    public ResponseEntity<?> delete(@PathVariable("uuid") UUID uuid) {
+        userService.deleteUser(uuid);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/logout")

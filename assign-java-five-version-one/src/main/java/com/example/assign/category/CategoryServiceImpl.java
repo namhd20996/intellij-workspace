@@ -1,6 +1,7 @@
 package com.example.assign.category;
 
 import com.example.assign.exception.ApiRequestException;
+import com.example.assign.exception.ResourceDuplicateException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO addCategory(CategoryDTO dto) {
+        boolean existsByName = existsByName(dto.getName());
+        if (existsByName) {
+            throw new ResourceDuplicateException("name category exists");
+        }
         Category category = converter.toEntity(dto);
         category.setStatus(1);
         return converter.toDTO(categoryRepo.save(category));

@@ -2,7 +2,7 @@ package com.example.service.impl;
 
 import com.example.dao.BookDAO;
 import com.example.dto.BookDTO;
-import com.example.entity.Book;
+import com.example.entity.User;
 import com.example.mapper.BookDTOMapper;
 import com.example.service.BookService;
 
@@ -17,12 +17,12 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDTO addBook(BookDTO request) {
-        Book book = bookDAO.getBookById(request.getId());
+        User book = bookDAO.getBookById(request.getId());
         if (book != null) {
-            return null;
+            throw new RuntimeException("id already!.");
         }
-        Book entity = bookDAO.addBook(
-                new Book(
+        User entity = bookDAO.addBook(
+                new User(
                         request.getId(),
                         request.getName(),
                         request.getPrice(),
@@ -35,9 +35,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDTO updateBook(BookDTO request) {
-        Book bookOld = bookDAO.getBookById(request.getId());
+        User bookOld = bookDAO.getBookById(request.getId());
         if (bookOld == null) {
-            return null;
+           throw new RuntimeException("");
         }
 
         if (bookOld.getName() == null || !bookOld.getName().equals(request.getName())) {
@@ -55,13 +55,13 @@ public class BookServiceImpl implements BookService {
         if (bookOld.getCategory() == null || !bookOld.getCategory().equals(request.getCategory())) {
             bookOld.setCategory(request.getCategory());
         }
-        Book entity = bookDAO.updateBook(bookOld);
+        User entity = bookDAO.updateBook(bookOld);
         return BookDTOMapper.getInstance().apply(entity);
     }
 
     @Override
     public void deleteBook(String id) {
-        Book entity = bookDAO.getBookById(id);
+        User entity = bookDAO.getBookById(id);
         bookDAO.deleteBook(entity);
     }
 

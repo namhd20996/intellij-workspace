@@ -3,14 +3,18 @@ package com.example.assign.orderdetails;
 import com.example.assign.order.OrderDTO;
 import com.example.assign.product.ProductDTO;
 import com.example.assign.util.BaseDTO;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class OrderDetailsDTO extends BaseDTO<OrderDetailsDTO> {
+@SuperBuilder(toBuilder = true)
+public class OrderDetailsDTO extends BaseDTO {
 
     private Double price;
     private Integer quantity;
